@@ -1,2 +1,2 @@
-# database
-Database Connections and Query Builder
+# BasePHP Package: Database
+Database and Query Builder
