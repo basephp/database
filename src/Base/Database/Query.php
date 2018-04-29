@@ -4,134 +4,134 @@ namespace Base\Database;
 
 
 /**
- * Class Builder
- *
- */
+* Class Builder
+*
+*/
 class Query
 {
 
-	/**
-	 * SELECT
-	 *
-	 * @var array
-	 */
-	protected $select = [];
+    /**
+    * SELECT
+    *
+    * @var array
+    */
+    protected $select = [];
 
 
-	/**
-	 * FROM
-	 *
-	 * @var array
-	 */
-	protected $from = [];
+    /**
+    * FROM
+    *
+    * @var array
+    */
+    protected $from = [];
 
 
-	/**
-	 * WHERE
-	 *
-	 * @var array
-	 */
-	protected $where = [];
+    /**
+    * WHERE
+    *
+    * @var array
+    */
+    protected $where = [];
 
 
-	/**
-	 * GROUP BY
-	 *
-	 * @var array
-	 */
-	protected $groupBy = [];
+    /**
+    * GROUP BY
+    *
+    * @var array
+    */
+    protected $groupBy = [];
 
 
-	/**
-	 * HAVING
-	 *
-	 * @var array
-	 */
-	protected $having = [];
+    /**
+    * HAVING
+    *
+    * @var array
+    */
+    protected $having = [];
 
 
-	/**
-	 * LIMIT
-	 *
-	 * @var int
-	 */
-	protected $limit = false;
+    /**
+    * LIMIT
+    *
+    * @var int
+    */
+    protected $limit = false;
 
 
-	/**
-	 * OFFSET
-	 *
-	 * @var int
-	 */
-	protected $offset = false;
+    /**
+    * OFFSET
+    *
+    * @var int
+    */
+    protected $offset = false;
 
 
-	/**
-	 * ORDER BY
-	 *
-	 * @var array
-	 */
-	public $orderBy = [];
+    /**
+    * ORDER BY
+    *
+    * @var array
+    */
+    public $orderBy = [];
 
 
-	/**
-	 * SET
-	 *
-	 * @var array
-	 */
-	protected $set = [];
+    /**
+    * SET
+    *
+    * @var array
+    */
+    protected $set = [];
 
 
 
     /**
-	 * SELECT
-     *
-     * @return $this
-	 */
-	public function select($select = '*')
-	{
+    * SELECT
+    *
+    * @return $this
+    */
+    public function select($select = '*')
+    {
         if (is_string($select))
-		{
-			$select = explode(',', $select);
-		}
+        {
+            $select = explode(',', $select);
+        }
 
-		foreach ($select as $val)
-		{
-			$val = trim($val);
+        foreach ($select as $val)
+        {
+            $val = trim($val);
 
-			if ($val !== '' && !in_array($val, $this->select))
-			{
-				$this->select[] = $val;
-			}
-		}
+            if ($val !== '' && !in_array($val, $this->select))
+            {
+                $this->select[] = $val;
+            }
+        }
 
-		return $this;
+        return $this;
     }
 
 
     /**
-	 * FROM
-     *
-     * @return $this
-	 */
-	public function from($from)
-	{
+    * FROM
+    *
+    * @return $this
+    */
+    public function from($from)
+    {
         if (is_string($from))
-		{
-			$from = explode(',', $from);
-		}
+        {
+            $from = explode(',', $from);
+        }
 
-		foreach ($from as $val)
-		{
-			$val = trim($val);
+        foreach ($from as $val)
+        {
+            $val = trim($val);
 
-			if ($val !== '' && !in_array($val, $this->from))
-			{
-				$this->from[] = $val;
-			}
-		}
+            if ($val !== '' && !in_array($val, $this->from))
+            {
+                $this->from[] = $val;
+            }
+        }
 
-		return $this;
+        return $this;
     }
 
 
@@ -143,34 +143,34 @@ class Query
 	public function where($key, $value = NULL)
 	{
         if ( ! is_array($key))
-		{
-			$key = [$key => $value];
-		}
+        {
+            $key = [$key => $value];
+        }
 
         // always default to "=" operator
         $o = '=';
 
         foreach ($key as $k => $v)
-		{
+        {
             if ($v !== null)
-			{
-				$op = $this->getOperator($k);
-				$k = trim(str_replace($op, '', $k));
+            {
+                $op = $this->getOperator($k);
+                $k = trim(str_replace($op, '', $k));
 
-				if (!empty($op))
-				{
-					$o = $op;
-				}
-			}
-			elseif ( ! $this->hasOperator($k))
-			{
-				// assign this "IS NULL" (missing operator/value)
-				$k .= ' IS NULL';
-			}
-			elseif (preg_match('/\s*(!?=|<>|IS(?:\s+NOT)?)\s*$/i', $k, $match, PREG_OFFSET_CAPTURE))
-			{
-				$k = substr($k, 0, $match[0][1]) . ($match[1][0] === '=' ? ' IS NULL' : ' IS NOT NULL');
-			}
+                if (!empty($op))
+                {
+                $o = $op;
+                }
+            }
+            elseif ( ! $this->hasOperator($k))
+            {
+                // assign this "IS NULL" (missing operator/value)
+                $k .= ' IS NULL';
+            }
+            elseif (preg_match('/\s*(!?=|<>|IS(?:\s+NOT)?)\s*$/i', $k, $match, PREG_OFFSET_CAPTURE))
+            {
+                $k = substr($k, 0, $match[0][1]) . ($match[1][0] === '=' ? ' IS NULL' : ' IS NOT NULL');
+            }
 
             $this->where[] = [
                 'f' => $k,
@@ -185,21 +185,21 @@ class Query
 
 
     /**
-	 * WHERE IN (...)
-	 *
-     * ->in('field', [1,2,3])
-     *
-     *
-     * @return $this
-	 */
-	public function in($key, $values = [])
-	{
+    * WHERE IN (...)
+    *
+    * ->in('field', [1,2,3])
+    *
+    *
+    * @return $this
+    */
+    public function in($key, $values = [])
+    {
         $values = (array) $values;
 
         if (!is_string($key))
-		{
-			return $this;
-		}
+        {
+            return $this;
+        }
 
         $this->where[] = [
             'f' => $key,
@@ -207,23 +207,23 @@ class Query
             'v' => $values
         ];
 
-		return $this;
+        return $this;
     }
 
 
     /**
-	 * WHERE NOT IN (...)
-	 *
-     * @return $this
-	 */
-	public function not($key, $values = [])
-	{
+    * WHERE NOT IN (...)
+    *
+    * @return $this
+    */
+    public function not($key, $values = [])
+    {
         $values = (array) $values;
 
         if (!is_string($key))
-		{
-			return $this;
-		}
+        {
+            return $this;
+        }
 
         $this->where[] = [
             'f' => $key,
@@ -231,17 +231,17 @@ class Query
             'v' => $values
         ];
 
-		return $this;
+        return $this;
     }
 
 
     /**
-	 * ORDER BY
-	 *
-     * @return $this
-	 */
-	public function order($orderby, $direction = '')
-	{
+    * ORDER BY
+    *
+    * @return $this
+    */
+    public function order($orderby, $direction = '')
+    {
         if ($direction != '')
         {
             $direction = strtoupper(trim($direction));
@@ -249,132 +249,130 @@ class Query
         }
 
         if (empty($orderby))
-		{
-			return $this;
-		}
+        {
+            return $this;
+        }
 
         if (is_string($orderby))
-		{
-			$orderby = explode(',', $orderby);
-		}
+        {
+            $orderby = explode(',', $orderby);
+        }
 
-		foreach ($orderby as $field)
-		{
-			$field = trim($field);
+        foreach ($orderby as $field)
+        {
+            $field = trim($field);
 
-			if ($field !== '')
-			{
+            if ($field !== '')
+            {
                 $val = preg_match('/\s+(ASC|DESC)$/i', rtrim($field), $match, PREG_OFFSET_CAPTURE);
 
-				$this->orderBy[] = [
+                $this->orderBy[] = [
                     'field' => ($val) ? ltrim(substr($field, 0, $match[0][1])) : $field,
                     'dir' => ($val) ? $match[1][0] : $direction
                 ];
-			}
-		}
+            }
+        }
 
-		return $this;
+        return $this;
     }
 
 
     /**
-	 * GROUP BY
-	 *
-     * @return $this
-	 */
-	public function group($groupby)
-	{
+    * GROUP BY
+    *
+    * @return $this
+    */
+    public function group($groupby)
+    {
         if (is_string($groupby))
-		{
-			$groupby = explode(',', $groupby);
-		}
+        {
+            $groupby = explode(',', $groupby);
+        }
 
-		foreach ($groupby as $val)
-		{
-			$val = trim($val);
+        foreach ($groupby as $val)
+        {
+            $val = trim($val);
 
-			if ($val !== '')
-			{
-				$this->groupBy[] = $val;
-			}
-		}
+            if ($val !== '')
+            {
+                $this->groupBy[] = $val;
+            }
+        }
 
-		return $this;
+        return $this;
     }
 
 
 
     /**
-	 * LIMIT
-     *
-     * @return $this
-	 */
-	public function limit(int $value = null, int $offset = 0)
-	{
+    * LIMIT
+    *
+    * @return $this
+    */
+    public function limit(int $value = null, int $offset = 0)
+    {
         if ( ! is_null($value))
-		{
-			$this->limit = $value;
-		}
+        {
+            $this->limit = $value;
+        }
 
-		if ( ! empty($offset))
-		{
-			$this->offset = $offset;
-		}
-
-		return $this;
-    }
-
-
-    /**
-	 * OFFSET
-     *
-     * @return $this
-	 */
-	public function offset($offset)
-	{
         if ( ! empty($offset))
-		{
-			$this->offset = (int) $offset;
-		}
+        {
+            $this->offset = $offset;
+        }
 
-		return $this;
+        return $this;
     }
 
 
     /**
-	 * SET
-     *
-     * @return $this
-	 */
-	public function set($set, $value = NULL)
-	{
+    * OFFSET
+    *
+    * @return $this
+    */
+    public function offset($offset)
+    {
+        if ( ! empty($offset))
+        {
+            $this->offset = (int) $offset;
+        }
+
+        return $this;
+    }
+
+
+    /**
+    * SET
+    *
+    * @return $this
+    */
+    public function set($set, $value = NULL)
+    {
         if (!is_array($set) && !is_null($value))
-		{
-			$set = [$set => $value];
-		}
+        {
+            $set = [$set => $value];
+        }
 
-		foreach ($set as $k => $v)
-		{
-			$v = trim($v);
+        foreach ($set as $k => $v)
+        {
+            $v = trim($v);
 
-			if ($v !== '')
-			{
-				$this->set[$k] = $v;
-			}
-		}
+            if ($v !== '')
+            {
+                $this->set[$k] = $v;
+            }
+        }
 
-		return $this;
+        return $this;
     }
 
 
-
-
     /**
-	 * Run the query and return the results
-     *
-	 */
-	public function get()
-	{
+    * Run the query and return the results
+    *
+    */
+    public function get()
+    {
         $sql = $this->buildSelect();
 
         $this->resetAll();
@@ -384,11 +382,11 @@ class Query
 
 
     /**
-	 * Run the query and return the results
-     *
-	 */
-	public function update()
-	{
+    * Run the query and return the results
+    *
+    */
+    public function update()
+    {
         if (empty($this->from) || !$this->from) return false;
 
         $sql = "UPDATE ".implode(',', $this->from);
@@ -403,11 +401,11 @@ class Query
 
 
     /**
-	 * Run the query and return the results
-     *
-	 */
-	public function delete()
-	{
+    * Run the query and return the results
+    *
+    */
+    public function delete()
+    {
         if (empty($this->from) || !$this->from) return false;
 
         $sql = "DELETE FROM ".implode(',', $this->from);
@@ -421,11 +419,11 @@ class Query
 
 
     /**
-	 * Run the query and return the results
-     *
-	 */
-	public function insert()
-	{
+    * Run the query and return the results
+    *
+    */
+    public function insert()
+    {
         if (empty($this->from) || !$this->from) return false;
 
         $sql = "INSERT INTO ".implode(',', $this->from);
@@ -438,11 +436,11 @@ class Query
 
 
     /**
-	 * Run the query and return the results
-     *
-	 */
-	public function count()
-	{
+    * Run the query and return the results
+    *
+    */
+    public function count()
+    {
         if (empty($this->from) || !$this->from) return false;
 
         $sql = "COUNT (*) AS total FROM ".implode(',', $this->from);
@@ -455,11 +453,11 @@ class Query
 
 
     /**
-	 * Clear out all database items from table
-     *
-	 */
-	public function truncate()
-	{
+    * Clear out all database items from table
+    *
+    */
+    public function truncate()
+    {
         if (empty($this->from) || !$this->from) return false;
 
         $sql = "TRUNCATE ".implode(',', $this->from);
@@ -474,18 +472,17 @@ class Query
 
 
     /**
-	 * Build the SELECT statement
-	 *
-	 * Generates a query string based on which functions were used.
-	 * Should not be called directly.
-	 *
-	 * @param    bool $select_override
-	 *
-	 * @return    string
-	 */
-	protected function buildSelect()
-	{
-        // SELECT logic
+    * Build the SELECT statement
+    *
+    * Generates a query string based on which functions were used.
+    * Should not be called directly.
+    *
+    * @param    bool $select_override
+    *
+    * @return    string
+    */
+    protected function buildSelect()
+    {
         $sql = 'SELECT ';
 
         if (empty($this->select))
@@ -497,33 +494,33 @@ class Query
             $sql .= implode(',', $this->select);
         }
 
-		// FROM logic
-		if (! empty($this->from))
-		{
-			$sql .= " FROM " . implode(', ', $this->from);
-		}
+        // FROM logic
+        if (! empty($this->from))
+        {
+            $sql .= " FROM " . implode(', ', $this->from);
+        }
 
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlGroupBy($sql);
         $sql = $this->sqlOrderBy($sql);
-		$sql = $this->sqlLimit($sql);
+        $sql = $this->sqlLimit($sql);
 
-		return $sql;
-	}
+        return $sql;
+    }
 
 
     //--------------------------------------------------------------------
 
 
     /**
-	 * BUILD SQL "SET"
-	 *
-	 *
-	 * @param string $sql
-	 * @return string
-	 */
-	protected function sqlSet($sql)
-	{
+    * BUILD SQL "SET"
+    *
+    *
+    * @param string $sql
+    * @return string
+    */
+    protected function sqlSet($sql)
+    {
         if (!$this->set) return $sql;
 
         $sets = [];
@@ -534,22 +531,22 @@ class Query
             $sets[] = $field . ' = ' . $value;
         }
 
-		return $sql . " SET " . implode(', ', $sets);
-	}
+        return $sql . " SET " . implode(', ', $sets);
+    }
 
 
     //--------------------------------------------------------------------
 
 
     /**
-	 * BUILD SQL "WHERE"
-	 *
-	 *
-	 * @param string $sql
-	 * @return string
-	 */
-	protected function sqlWhere($sql)
-	{
+    * BUILD SQL "WHERE"
+    *
+    *
+    * @param string $sql
+    * @return string
+    */
+    protected function sqlWhere($sql)
+    {
         $start = false;
         foreach($this->where as $where)
         {
@@ -576,21 +573,21 @@ class Query
         }
 
         return $sql;
-	}
+    }
 
 
     //--------------------------------------------------------------------
 
 
     /**
-	 * BUILD SQL "ORDER BY"
-	 *
-	 *
-	 * @param string $sql
-	 * @return string
-	 */
-	protected function sqlOrderBy($sql)
-	{
+    * BUILD SQL "ORDER BY"
+    *
+    *
+    * @param string $sql
+    * @return string
+    */
+    protected function sqlOrderBy($sql)
+    {
         if (!$this->orderBy) return $sql;
 
         $orderBy = [];
@@ -599,112 +596,113 @@ class Query
             $orderBy[] = $order['field'] . ' ' . $order['dir'];
         }
 
-		return $sql . " ORDER BY " . implode(', ', $orderBy);
-	}
+        return $sql . " ORDER BY " . implode(', ', $orderBy);
+    }
 
 
     //--------------------------------------------------------------------
 
 
     /**
-	 * BUILD SQL "GROUP BY"
-	 *
-	 *
-	 * @param string $sql
-	 * @return string
-	 */
-	protected function sqlGroupBy($sql)
-	{
+    * BUILD SQL "GROUP BY"
+    *
+    *
+    * @param string $sql
+    * @return string
+    */
+    protected function sqlGroupBy($sql)
+    {
         if (!$this->groupBy) return $sql;
 
-		return $sql . " GROUP BY " . implode(',', $this->groupBy);
-	}
+        return $sql . " GROUP BY " . implode(',', $this->groupBy);
+    }
 
 
     //--------------------------------------------------------------------
 
 
-	/**
-	 * BUILD SQL "LIMIT" (and OFFSET)
-	 *
-	 *
-	 * @param string $sql
-	 * @return string
-	 */
-	protected function sqlLimit($sql)
-	{
+    /**
+    * BUILD SQL "LIMIT" (and OFFSET)
+    *
+    *
+    * @param string $sql
+    * @return string
+    */
+    protected function sqlLimit($sql)
+    {
         if (!$this->limit) return $sql;
 
-		return $sql . " LIMIT " . ($this->offset ? $this->offset . ',' : '') . $this->limit;
-	}
+        return $sql . " LIMIT " . ($this->offset ? $this->offset . ',' : '') . $this->limit;
+    }
 
 
     //--------------------------------------------------------------------
 
 
-	/**
-	 * Resets the class variable values to their defaults
-	 *
-	 * @param array $items
-	 */
-	protected function reset($items)
-	{
-		foreach ($items as $item => $default_value)
-		{
-			$this->$item = $default_value;
-		}
-	}
+    /**
+    * Resets the class variable values to their defaults
+    *
+    * @param array $items
+    */
+    protected function reset($items)
+    {
+        foreach ($items as $item => $default_value)
+        {
+            $this->$item = $default_value;
+        }
+    }
 
 
     //--------------------------------------------------------------------
 
 
-	/**
-	 * Reset all the SQL statement variables
-	 *
-	 */
-	protected function resetAll()
-	{
+    /**
+    * Reset all the SQL statement variables
+    *
+    */
+    protected function resetAll()
+    {
         $this->reset([
-			'select'   => [],
-			'where'	   => [],
+            'select'   => [],
+            'where'	   => [],
             'from'     => [],
             'having'   => [],
- 			'groupBy'  => [],
-			'orderBy'  => [],
+            'groupBy'  => [],
+            'orderBy'  => [],
             'set'      => [],
-			'limit'    => false,
-			'offset'   => false,
-		]);
-	}
+            'limit'    => false,
+            'offset'   => false
+        ]);
+    }
 
 
     //--------------------------------------------------------------------
 
 
-	/**
-	 * Checks whether a SQL operator exist.
-	 *
-	 * @param string $str
-	 * @return bool
-	 */
-	protected function hasOperator($str)
-	{
-		return (bool) preg_match('/(<|>|!|=|\sIS NULL|\sIS NOT NULL|\sEXISTS|\sBETWEEN|\sLIKE|\sIN\s*\(|\s)/i', trim($str));
-	}
+    /**
+    * Checks whether a SQL operator exist.
+    *
+    * @param string $str
+    * @return bool
+    */
+    protected function hasOperator($str)
+    {
+        return (bool) preg_match('/(<|>|!|=|\sIS NULL|\sIS NOT NULL|\sEXISTS|\sBETWEEN|\sLIKE|\sIN\s*\(|\s)/i', trim($str));
+    }
 
 
     // --------------------------------------------------------------------
 
-	/**
-	 * Returns the SQL string operator
-	 *
-	 * @param string $str
-	 * @return string
-	 */
-	protected function getOperator($str)
-	{
-		return preg_match('/' . implode('|', [
+
+    /**
+    * Returns the SQL string operator
+    *
+    * @param string $str
+    * @return string
+    */
+    protected function getOperator($str)
+    {
+        return preg_match('/' . implode('|', [
             // =, <=, >=, !=
             '\s*(?:<|>|!)?=\s*',
             // <, <>
@@ -714,9 +712,6 @@ class Query
             // BETWEEN value AND value
             '\s+BETWEEN\s+',
         ]) . '/i', $str, $match) ? $match[0] : false;
-	}
-
-
-
+    }
 
 }
