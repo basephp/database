@@ -389,11 +389,9 @@ class Query
 	 */
 	public function update()
 	{
-        $sql = "UPDATE ";
-
         if (empty($this->from) || !$this->from) return false;
 
-		$sql .= implode(', ', $this->from);
+        $sql = "UPDATE ".implode(',', $this->from);
         $sql = $this->sqlSet($sql);
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlLimit($sql);
@@ -410,11 +408,9 @@ class Query
 	 */
 	public function delete()
 	{
-        $sql = "DELETE ";
-
         if (empty($this->from) || !$this->from) return false;
 
-		$sql .= "FROM ".implode(', ', $this->from);
+        $sql = "DELETE FROM ".implode(',', $this->from);
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlLimit($sql);
 
@@ -430,6 +426,11 @@ class Query
 	 */
 	public function insert()
 	{
+        if (empty($this->from) || !$this->from) return false;
+
+        $sql = "INSERT INTO ".implode(',', $this->from);
+        $sql = $this->sqlSet($sql);
+
         $this->resetAll();
 
         return $sql;
@@ -442,6 +443,11 @@ class Query
 	 */
 	public function count()
 	{
+        if (empty($this->from) || !$this->from) return false;
+
+        $sql = "COUNT (*) AS total FROM ".implode(',', $this->from);
+        $sql = $this->sqlWhere($sql);
+
         $this->resetAll();
 
         return $sql;
@@ -454,6 +460,10 @@ class Query
 	 */
 	public function truncate()
 	{
+        if (empty($this->from) || !$this->from) return false;
+
+        $sql = "TRUNCATE ".implode(',', $this->from);
+
         $this->resetAll();
 
         return $sql;
