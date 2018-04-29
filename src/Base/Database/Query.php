@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Libraries\Database;
+namespace Base\Database;
 
 
 /**
