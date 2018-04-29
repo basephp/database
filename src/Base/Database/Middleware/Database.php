@@ -1,4 +1,4 @@
-<?php namespace Base\Database\Middleware\Database;
+<?php namespace Base\Database\Middleware;
 
 use Base\Routing\Middleware;
 use Base\Database\Connect;
