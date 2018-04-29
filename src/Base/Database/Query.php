@@ -348,18 +348,18 @@ class Query
 	 */
 	public function set($set, $value = NULL)
 	{
-        if (is_string($set) && is_string($value))
+        if (!is_array($set) && !is_null($value))
 		{
 			$set = [$set => $value];
 		}
 
-		foreach ($set as $val)
+		foreach ($set as $k => $v)
 		{
-			$val = trim($val);
+			$v = trim($v);
 
-			if ($val !== '')
+			if ($v !== '')
 			{
-				$this->set[$set] = $val;
+				$this->set[$k] = $v;
 			}
 		}
 
@@ -389,7 +389,18 @@ class Query
 	 */
 	public function update()
 	{
+        $sql = "UPDATE ";
+
+        if (empty($this->from) || !$this->from) return false;
+
+		$sql .= implode(', ', $this->from);
+        $sql = $this->sqlSet($sql);
+        $sql = $this->sqlWhere($sql);
+        $sql = $this->sqlLimit($sql);
+
         $this->resetAll();
+
+        return $sql;
     }
 
 
@@ -399,7 +410,17 @@ class Query
 	 */
 	public function delete()
 	{
+        $sql = "DELETE ";
+
+        if (empty($this->from) || !$this->from) return false;
+
+		$sql .= "FROM ".implode(', ', $this->from);
+        $sql = $this->sqlWhere($sql);
+        $sql = $this->sqlLimit($sql);
+
         $this->resetAll();
+
+        return $sql;
     }
 
 
@@ -410,6 +431,8 @@ class Query
 	public function insert()
 	{
         $this->resetAll();
+
+        return $sql;
     }
 
 
@@ -420,6 +443,8 @@ class Query
 	public function count()
 	{
         $this->resetAll();
+
+        return $sql;
     }
 
 
@@ -430,6 +455,8 @@ class Query
 	public function truncate()
 	{
         $this->resetAll();
+
+        return $sql;
     }
 
 
@@ -472,6 +499,32 @@ class Query
 		$sql = $this->sqlLimit($sql);
 
 		return $sql;
+	}
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+	 * BUILD SQL "SET"
+	 *
+	 *
+	 * @param string $sql
+	 * @return string
+	 */
+	protected function sqlSet($sql)
+	{
+        if (!$this->set) return $sql;
+
+        $sets = [];
+        foreach($this->set as $field => $value)
+        {
+            if (!is_numeric($value)) $value = "'".$value."'";
+
+            $sets[] = $field . ' = ' . $value;
+        }
+
+		return $sql . " SET " . implode(', ', $sets);
 	}
 
 
