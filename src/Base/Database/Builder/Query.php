@@ -887,6 +887,7 @@ class Query extends Database
             'select'   => [],
             'where'	   => [],
             'from'     => [],
+            'join'     => [],
             'having'   => [],
             'groupBy'  => [],
             'orderBy'  => [],
