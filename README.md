@@ -59,7 +59,7 @@ $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 
 ```
 
-Query Builder:
+`SQL` Builder:
 ---------------
 
 *These methods are stackable*
@@ -104,6 +104,7 @@ Query Builder:
 |`update()`       | Run the `UPDATE` query                        |
 |`delete()`       | Run the `DELETE` query                        |
 |`insert()`       | Run the `INSERT` query                        |
+|`truncate()`     | Run the `TRUNCATE` query                      |
 
 
 Database Support

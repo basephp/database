@@ -597,7 +597,7 @@ class Query extends Database
 
         if ($test==true) return $sql;
 
-        return $sql;
+        return $this->db->query($sql);
     }
 
 
