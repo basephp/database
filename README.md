@@ -41,16 +41,15 @@ DB::table('users')->where('id',7455)->delete();
 
 // Update
 DB::table('users')
-    ->set(['name' => 'John'])
     ->where('id',1233)
-    ->update();
+    ->update(['name' => 'John']);
 
 
 // Insert a new user
-DB::table('users')->set([
-        'name' => 'Joe',
-        'email' => 'joe@email.com'
-    ])->insert();
+DB::table('users')->insert([
+    'name' => 'Joe Smith',
+    'email' => 'joesmith@email.com'
+]);
 
 
 // Get a total count for how many enabled users are in the database
@@ -72,7 +71,6 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 |---              |---                          |---                  |
 |`select()`       | *Optional* Default: `*`     | `SELECT fields`     |
 |`table()`        | Required                    | `FROM table`        |
-|`set()`          | Required `INSERT/UPDATE`    | `SET fields`        |
 |`where()`        | *Optional*                  | `WHERE`             |
 |`in()`           | *Optional*                  | `IN (values)`       |
 |`not()`          | *Optional*                  | `NOT IN (values)`   |
@@ -105,12 +103,12 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 
 |Method                       | Description                                   |
 |---                          |---                                            |
-|`update()`                   | Run the `UPDATE` query                        |
+|`update(array)`              | Run the `UPDATE` query                        |
+|`insert(array)`              | Run the `INSERT` query                        |
 |`delete()`                   | Run the `DELETE` query                        |
-|`insert()`                   | Run the `INSERT` query                        |
-|`truncate()`                 | Run the `TRUNCATE` query                      |
 |`increment(field, value)`    | Run the `UPDATE` query                        |
 |`decrement(field, value)`    | Run the `UPDATE` query                        |
+|`truncate()`                 | Run the `TRUNCATE` query                      |
 
 
 Database Support

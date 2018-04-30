@@ -356,7 +356,7 @@ class Query extends Database
     *
     * @return $this
     */
-    public function set($set, $value = NULL)
+    protected function set($set, $value = NULL)
     {
         if (!is_array($set) && !is_null($value))
         {
@@ -443,14 +443,39 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function update($test = false)
+    public function update($set = [], $test = false)
     {
         if (empty($this->from) || !$this->from) return false;
+        if (empty($set)) return false;
+
+        $this->set($set);
 
         $sql = "UPDATE ".implode(',', $this->from);
         $sql = $this->sqlSet($sql);
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlLimit($sql);
+
+        $this->resetAll();
+
+        if ($test==true) return $sql;
+
+        return $this->db->query($sql);
+    }
+
+
+    /**
+    * Run the query and return the results
+    *
+    */
+    public function insert($set = [], $test = false)
+    {
+        if (empty($this->from) || !$this->from) return false;
+        if (empty($set)) return false;
+
+        $this->set($set);
+
+        $sql = "INSERT INTO ".implode(',', $this->from);
+        $sql = $this->sqlSet($sql);
 
         $this->resetAll();
 
@@ -513,25 +538,6 @@ class Query extends Database
         $sql = "DELETE FROM ".implode(',', $this->from);
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlLimit($sql);
-
-        $this->resetAll();
-
-        if ($test==true) return $sql;
-
-        return $this->db->query($sql);
-    }
-
-
-    /**
-    * Run the query and return the results
-    *
-    */
-    public function insert($test = false)
-    {
-        if (empty($this->from) || !$this->from) return false;
-
-        $sql = "INSERT INTO ".implode(',', $this->from);
-        $sql = $this->sqlSet($sql);
 
         $this->resetAll();
 
