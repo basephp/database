@@ -8,7 +8,7 @@
 class Database
 {
 
-    protected $db = NULL;
+    protected $db;
 
 
     /**
