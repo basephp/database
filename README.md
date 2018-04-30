@@ -8,11 +8,7 @@ Installation:
 
 `php composer.phar require basephp/database dev-master`
 
-**(2)** Use the `DB` class:**
-
-`use \Base\Support\Facades\DB;`
-
-**(3)** Add database to your `.env` file
+**(2)** Add database to your `.env` file
 
 ```
 DB_USER=admin
@@ -21,7 +17,7 @@ DB_HOST=127.0.0.1
 DB_NAME=database
 ```
 
-**(4)** Add the `example_config.php` to your `config/` directory (rename it to `db.php`)
+**(3)** Add the `example_config.php` to your `config/` directory (rename it to `db.php`)
 
 And now you should have full access to your database and all query builder methods below.
 
@@ -30,6 +26,9 @@ Usage Examples:
 ---------------
 
 ```php
+
+// add the access to the DB::class
+use \Base\Support\Facades\DB;
 
 // get the test more recent users
 $users = DB::select(['id','name'])->table('users')->where(['status'=>'enabled'])->limit(10)->order('id DESC')->results();
@@ -42,10 +41,7 @@ DB::table('users')->where('id',7455)->delete();
 
 // Update
 DB::table('users')
-    ->set([
-        'name' => 'John',
-        'email' => 'johnsmith@email.com'
-    ])
+    ->set(['name' => 'John'])
     ->where('id',1233)
     ->update();
 
@@ -67,18 +63,18 @@ $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 
 *These methods are stackable*
 
-|Method           | Description         |
-|---              |---                  |
-|`select()`       | `SELECT fields`     |
-|`table()`        | `FROM table`        |
-|`where()`        | `WHERE`             |
-|`in()`           | `IN (values)`       |
-|`not()`          | `NOT IN (values)`   |
-|`limit()`        | `LIMIT number`      |
-|`offset()`       | Adding an offset    |
-|`order()`        | `ORDER BY fields`   |
-|`group()`        | `GROUP BY fields`   |
-|`set()`          | `SET fields`        |
+|Method           |Option                       |Description          |
+|---              |---                          |---                  |
+|`select()`       | *Optional* Default: `*`     | `SELECT fields`     |
+|`table()`        | Required                    | `FROM table`        |
+|`set()`          | Required `INSERT/UPDATE`    | `SET fields`        |
+|`where()`        | *Optional*                  | `WHERE`             |
+|`in()`           | *Optional*                  | `IN (values)`       |
+|`not()`          | *Optional*                  | `NOT IN (values)`   |
+|`limit()`        | *Optional*                  | `LIMIT number`      |
+|`offset()`       | *Optional*                  | Adding an offset    |
+|`order()`        | *Optional*                  | `ORDER BY fields`   |
+|`group()`        | *Optional*                  | `GROUP BY fields`   |
 
 
 ### Query Result Methods:
