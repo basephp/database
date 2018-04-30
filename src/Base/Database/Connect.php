@@ -104,7 +104,11 @@ class Connect
             }
             else
             {
+                // persistant connection - 'p:'
                 $connectObject = new MySQLi($this->connection[$handle]['host'], $this->connection[$handle]['user'], $this->connection[$handle]['pass'], $this->connection[$handle]['database']);
+
+                // too soon to close the connection...
+                // $connectObject->close();
 
                 // $object->options(MYSQLI_OPT_CONNECT_TIMEOUT,5);
                 //This is a non OO method - only used for pre 5.2.9 compat.
