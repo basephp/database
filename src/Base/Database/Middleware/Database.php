@@ -13,7 +13,7 @@ class Database extends Middleware
         $db->setConnection(config('db.driver'), config('db.name'), config('db.host'), config('db.name'), config('db.user'), config('db.pass'));
 
         // add the database to the query builder
-        DB::setDatabase($db);
+        DB::setDatabase($db->{config('db.name')});
 
         // add the database to the app instance
         app()->register('db',$db);
