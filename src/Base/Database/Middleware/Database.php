@@ -1,7 +1,7 @@
 <?php namespace Base\Database\Middleware;
 
 use Base\Routing\Middleware;
-use Base\Database\Connect;
+use Base\Support\Facades\DB;
 use Base\Database\Query;
 
 class Database extends Middleware
