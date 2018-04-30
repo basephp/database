@@ -25,6 +25,14 @@ class Query extends Database
 
 
     /**
+    * JOIN
+    *
+    * @var array
+    */
+    protected $join = [];
+
+
+    /**
     * WHERE
     *
     * @var array
@@ -133,13 +141,47 @@ class Query extends Database
     }
 
 
+
+    /**
+    * JOIN
+    *
+    * Build the JOIN SQL
+    *
+    * @param string $table
+    * @param string $condition
+    * @param string $type
+    *
+    * @return $this
+    */
+    public function join($table, $condition, $type = '')
+    {
+        if ($type !== '')
+        {
+            $type = strtoupper(trim($type));
+
+            if ( ! in_array($type, ['LEFT', 'RIGHT', 'OUTER', 'INNER', 'LEFT OUTER', 'RIGHT OUTER'], true))
+            {
+                $type = '';
+            }
+        }
+
+        $this->join[] = [
+            'table' => $table,
+            'type' => $type,
+            'condition' => $condition
+        ];
+
+        return $this;
+    }
+
+
     /**
     * WHERE
     *
     * @return $this
     */
-	public function where($key, $value = NULL)
-	{
+    public function where($key, $value = NULL)
+    {
         if ( ! is_array($key))
         {
             $key = [$key => $value];
@@ -548,11 +590,11 @@ class Query extends Database
 
 
     /**
-	 * avg
-	 *
-	 */
-	protected function eqnumber($field, $eq)
-	{
+    * avg
+    *
+    */
+    protected function eqnumber($field, $eq)
+    {
         if (empty($this->from) || !$this->from) return false;
         if ($eq == '') return false;
 
@@ -566,58 +608,58 @@ class Query extends Database
 
         $count = $this->db->query($sql)->row();
 
-		return $count->eqnumber ?? 0;
-	}
+        return $count->eqnumber ?? 0;
+    }
 
 
     /**
-	 * count
-	 *
-	 */
-	public function count()
-	{
-		return $this->eqnumber("*", 'COUNT');
-	}
+    * count
+    *
+    */
+    public function count()
+    {
+        return $this->eqnumber("*", 'COUNT');
+    }
 
 
     /**
-	 * avg
-	 *
-	 */
-	public function avg($field)
-	{
-		return $this->eqnumber($field, 'AVG');
-	}
+    * avg
+    *
+    */
+    public function avg($field)
+    {
+        return $this->eqnumber($field, 'AVG');
+    }
 
 
     /**
-	 * max
-	 *
-	 */
-	public function max($field)
-	{
+    * max
+    *
+    */
+    public function max($field)
+    {
         return $this->eqnumber($field, 'MAX');
-	}
+    }
 
 
     /**
-	 * min
-	 *
-	 */
-	public function min($field)
-	{
+    * min
+    *
+    */
+    public function min($field)
+    {
         return $this->eqnumber($field, 'MIN');
-	}
+    }
 
 
     /**
-	 * sum
-	 *
-	 */
-	public function sum($field)
-	{
+    * sum
+    *
+    */
+    public function sum($field)
+    {
         return $this->eqnumber($field, 'SUM');
-	}
+    }
 
 
     /**
@@ -668,6 +710,15 @@ class Query extends Database
         if (! empty($this->from))
         {
             $sql .= " FROM " . implode(', ', $this->from);
+        }
+
+        // JOIN logic
+        if (! empty($this->join))
+        {
+            foreach($this->join as $join)
+            {
+                $sql .= " ".$join['type']." JOIN ".$join['table'].' ON '.$join['condition'];
+            }
         }
 
         $sql = $this->sqlWhere($sql);
@@ -858,6 +909,22 @@ class Query extends Database
     protected function hasOperator($str)
     {
         return (bool) preg_match('/(<|>|!|=|\sIS NULL|\sIS NOT NULL|\sEXISTS|\sBETWEEN|\sLIKE|\sIN\s*\(|\s)/i', trim($str));
+    }
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+    * Checks whether a SQL statement is a "WRITE" query.
+    *
+    * @param string $str
+    * @return bool
+    */
+    protected function isWrite($sql)
+    {
+        return (bool) preg_match(
+            '/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', $sql);
     }
 
 
