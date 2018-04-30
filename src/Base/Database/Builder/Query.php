@@ -514,7 +514,9 @@ class Query extends Database
 
         if ($test==true) return $sql;
 
-        return $this->db->query($sql);
+        $count = $this->db->query($sql)->row();
+
+        return $count->total ?? 0;
     }
 
 
