@@ -122,6 +122,9 @@ class Query extends Database
     */
     public function table($from)
     {
+        // protect the user and force a reset...
+        $this->resetAll();
+
         if (is_string($from))
         {
             $from = explode(',', $from);

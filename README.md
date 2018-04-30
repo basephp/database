@@ -31,7 +31,7 @@ Usage Examples:
 use \Base\Support\Facades\DB;
 
 // get the test more recent users
-$users = DB::select(['id','name'])->table('users')->where(['status'=>'enabled'])->limit(10)->order('id DESC')->results();
+$users = DB::table('users')->select(['id','name'])->where(['status'=>'enabled'])->limit(10)->order('id DESC')->results();
 
 // get just a single item (user) from the db table by id
 $user = DB::table('users')->where('id',32212)->row();
@@ -69,8 +69,8 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 
 |Method           |Option                       |Description          |
 |---              |---                          |---                  |
+|`table()`        | Required **MUST BE FIRST**  | `FROM table`        |
 |`select()`       | *Optional* Default: `*`     | `SELECT fields`     |
-|`table()`        | Required                    | `FROM table`        |
 |`where()`        | *Optional*                  | `WHERE`             |
 |`in()`           | *Optional*                  | `IN (values)`       |
 |`not()`          | *Optional*                  | `NOT IN (values)`   |
@@ -78,6 +78,8 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 |`offset()`       | *Optional*                  | Adding an offset    |
 |`order()`        | *Optional*                  | `ORDER BY fields`   |
 |`group()`        | *Optional*                  | `GROUP BY fields`   |
+
+*Note: Calling `table()` will reset the current SQL. For SQL protection, `table()` is required to be first in chain.
 
 
 `READ` Queries:
