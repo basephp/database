@@ -369,13 +369,13 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function get($sql = false)
+    public function get($test = false)
     {
         $sql = $this->buildSelect();
 
         $this->resetAll();
 
-        if ($sql==true) return $sql;
+        if ($test==true) return $sql;
 
         return $this->db->query($sql);
     }
@@ -385,9 +385,9 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function row($sql = false)
+    public function row($test = false)
     {
-        if ($sql==true) return $this->get($sql);
+        if ($test==true) return $this->get($sql);
 
         return $this->get($sql)->row();
     }
@@ -397,9 +397,9 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function results($sql = false)
+    public function results($test = false)
     {
-        if ($sql==true) return $this->get($sql);
+        if ($test==true) return $this->get($sql);
 
         return $this->get($sql)->results();
     }
@@ -409,9 +409,9 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function first($sql = false)
+    public function first($test = false)
     {
-        if ($sql==true) return $this->get($sql);
+        if ($test==true) return $this->get($sql);
 
         return $this->get($sql)->results()[0] ?? false;
     }
@@ -431,7 +431,7 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function update($sql = false)
+    public function update($test = false)
     {
         if (empty($this->from) || !$this->from) return false;
 
@@ -442,7 +442,7 @@ class Query extends Database
 
         $this->resetAll();
 
-        if ($sql==true) return $sql;
+        if ($test==true) return $sql;
 
         return $this->db->query($sql);
     }
@@ -452,7 +452,7 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function delete($sql = false)
+    public function delete($test = false)
     {
         if (empty($this->from) || !$this->from) return false;
 
@@ -462,7 +462,7 @@ class Query extends Database
 
         $this->resetAll();
 
-        if ($sql==true) return $sql;
+        if ($test==true) return $sql;
 
         return $this->db->query($sql);
     }
@@ -472,7 +472,7 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function insert($sql = false)
+    public function insert($test = false)
     {
         if (empty($this->from) || !$this->from) return false;
 
@@ -481,7 +481,7 @@ class Query extends Database
 
         $this->resetAll();
 
-        if ($sql==true) return $sql;
+        if ($test==true) return $sql;
 
         return $this->db->query($sql);
     }
@@ -491,7 +491,7 @@ class Query extends Database
     * Run the query and return the results
     *
     */
-    public function count($sql = false)
+    public function count($test = false)
     {
         if (empty($this->from) || !$this->from) return false;
 
@@ -500,7 +500,7 @@ class Query extends Database
 
         $this->resetAll();
 
-        if ($sql==true) return $sql;
+        if ($test==true) return $sql;
 
         return $this->db->query($sql);
     }
@@ -510,13 +510,15 @@ class Query extends Database
     * Clear out all database items from table
     *
     */
-    public function truncate()
+    public function truncate($test = false)
     {
         if (empty($this->from) || !$this->from) return false;
 
         $sql = "TRUNCATE ".implode(',', $this->from);
 
         $this->resetAll();
+
+        if ($test==true) return $sql;
 
         return $sql;
     }
