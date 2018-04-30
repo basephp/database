@@ -157,7 +157,7 @@ class Query extends Database
 
                 if (!empty($op))
                 {
-                $o = $op;
+                    $o = $op;
                 }
             }
             elseif ( ! $this->hasOperator($k))
@@ -173,7 +173,7 @@ class Query extends Database
             $this->where[] = [
                 'f' => $k,
                 'o' => $o,
-                'v' => $v
+                'v' => $this->escape($v)
             ];
 
         }
@@ -199,10 +199,16 @@ class Query extends Database
             return $this;
         }
 
+        $vals = [];
+        foreach($values as $v)
+        {
+            $vals[] = $this->escape($v);
+        }
+
         $this->where[] = [
             'f' => $key,
             'o' => 'IN',
-            'v' => $values
+            'v' => $vals
         ];
 
         return $this;
@@ -223,10 +229,16 @@ class Query extends Database
             return $this;
         }
 
+        $vals = [];
+        foreach($values as $v)
+        {
+            $vals[] = $this->escape($v);
+        }
+
         $this->where[] = [
             'f' => $key,
             'o' => 'NOT IN',
-            'v' => $values
+            'v' => $vals
         ];
 
         return $this;
@@ -357,7 +369,7 @@ class Query extends Database
 
             if ($v !== '')
             {
-                $this->set[$k] = $v;
+                $this->set[$k] = $this->escape($v);
             }
         }
 
