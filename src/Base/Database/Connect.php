@@ -7,8 +7,22 @@ use Base\Database\MySQLi\Connect AS MySQLi;
 */
 class Connect
 {
+
+    /**
+    * Connect instance
+    *
+    * @var object
+    */
     private static $instance;
-    private $_connections = array();
+
+
+    /**
+    * Connection settings
+    *
+    * @var array
+    */
+    private $connection = [];
+
 
     /**
     * gets the instance via lazy initialization (created on first usage)
@@ -17,12 +31,14 @@ class Connect
     */
     public static function getInstance()
     {
-        if (null === static::$instance) {
+        if (NULL === static::$instance)
+        {
             static::$instance = new static();
         }
 
         return static::$instance;
     }
+
 
     /**
     * is not allowed to call from outside: private!
@@ -33,6 +49,7 @@ class Connect
 
     }
 
+
     /**
     * prevent the instance from being cloned
     *
@@ -42,6 +59,7 @@ class Connect
     {
 
     }
+
 
     /**
     * prevent from being unserialized
@@ -58,13 +76,13 @@ class Connect
     * createConnection
     *
     */
-    public function createConnection($handle,$host,$database,$userName = null,$password = null)
+    public function setConnection($driver = 'MySQLi', $handle = 'default', $host = '127.0.0.1', $database = '', $user = NULL, $pass = NULL)
     {
-        $this->_connections[$handle] = [
+        $this->connection[$handle] = [
             'host' 	   => $host,
             'database' => $database,
-            'userName' => $userName,
-            'password' => $password
+            'user'     => $userName,
+            'pass'     => $password
         ];
 
         return $this;
@@ -77,32 +95,32 @@ class Connect
     */
     public function getDatabaseConnection($handle)
     {
-        if(isset($this->_connections[$handle]))
+        if(isset($this->connection[$handle]))
         {
-            if(isset($this->_connections[$handle]['object']))
+            if(isset($this->connection[$handle]['object']))
             {
-                return $this->_connections[$handle]['object'];
+                return $this->connection[$handle]['object'];
             }
             else
             {
-                $connectionData = $this->_connections[$handle];
-                $object = new MySQLi($connectionData['host'],$connectionData['userName'],$connectionData['password'],$connectionData['database']);
+                $connectObject = new MySQLi($this->connection[$handle]['host'], $this->connection[$handle]['user'], $this->connection[$handle]['pass'], $this->connection[$handle]['database']);
 
                 // $object->options(MYSQLI_OPT_CONNECT_TIMEOUT,5);
                 //This is a non OO method - only used for pre 5.2.9 compat.
                 if(!mysqli_connect_errno())
                 {
-                    $this->_connections[$handle]['object'] = $object;
-                    return $object;
+                    $this->connection[$handle]['object'] = $connectObject;
+
+                    return $connectObject;
                 }
                 else
                 {
-                    throw new Exception('Database Connect: Mysqli Connect Error: '.mysqli_connect_error());
+                    throw new Exception('Database: Mysqli Connect Error: '.mysqli_connect_error());
                 }
             }
         }
 
-        throw new Exception('Database Connect: Could not find a connection with the handle ' . $handle);
+        throw new Exception('Database: Could not find a connection with the handle ' . $handle);
     }
 
 
@@ -112,10 +130,12 @@ class Connect
     */
     public function __get($handle)
     {
-        try {
+        try
+        {
             return $this->getDatabaseConnection($handle);
         }
-        catch (Exception $e) {
+        catch (Exception $e)
+        {
             die($e->getMessage());
         }
     }
