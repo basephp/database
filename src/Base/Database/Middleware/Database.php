@@ -2,7 +2,7 @@
 
 use Base\Routing\Middleware;
 use Base\Database\Connect;
-use Base\Support\DB;
+use Base\Support\Facades\DB;
 
 class Database extends Middleware
 {
