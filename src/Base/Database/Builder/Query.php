@@ -553,7 +553,11 @@ class Query extends Database
     */
     public function eqmath($field, $number, $operator = '+', $test = false)
     {
-        if (empty($this->from) || !$this->from) return false;
+        if (empty($this->from) || !$this->from)
+        {
+            $this->resetAll();
+            return false;
+        }
 
         $sql  = "UPDATE ".implode(',', $this->from);
         $sql .= " SET ".$field." = ".$field.$operator.$number." ";
@@ -575,7 +579,11 @@ class Query extends Database
     */
     public function delete($test = false)
     {
-        if (empty($this->from) || !$this->from) return false;
+        if (empty($this->from) || !$this->from)
+        {
+            $this->resetAll();
+            return false;
+        }
 
         $sql = "DELETE FROM ".implode(',', $this->from);
         $sql = $this->sqlWhere($sql);
@@ -595,8 +603,17 @@ class Query extends Database
     */
     protected function eqnumber($field, $eq)
     {
-        if (empty($this->from) || !$this->from) return false;
-        if ($eq == '') return false;
+        if (empty($this->from) || !$this->from)
+        {
+            $this->resetAll();
+            return false;
+        }
+
+        if ($eq == '')
+        {
+            $this->resetAll();
+            return false;
+        }
 
         $sql = 'SELECT '.strtoupper($eq)."(".$field.") AS eqnumber FROM ".implode(',', $this->from);
         $sql = $this->sqlWhere($sql);
@@ -668,7 +685,11 @@ class Query extends Database
     */
     public function truncate($test = false)
     {
-        if (empty($this->from) || !$this->from) return false;
+        if (empty($this->from) || !$this->from)
+        {
+            $this->resetAll();
+            return false;
+        }
 
         $sql = "TRUNCATE ".implode(',', $this->from);
 
