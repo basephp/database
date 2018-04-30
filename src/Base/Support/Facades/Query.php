@@ -2,10 +2,10 @@
 
 namespace Base\Support\Facades;
 
-class DB extends \Base\Support\Facades\Facade
+class Query extends \Base\Support\Facades\Facade
 {
     protected static function getClass()
     {
-        return \Base\Database\Connect::class;
+        return \Base\Database\Query::class;
     }
 }

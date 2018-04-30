@@ -9,11 +9,67 @@ class Connect
 {
 
     /**
+    * Connect instance
+    *
+    * @var object
+    */
+    private static $instance;
+
+
+    /**
     * Connection settings
     *
     * @var array
     */
     private $connection = [];
+
+
+    /**
+    * gets the instance via lazy initialization (created on first usage)
+    *
+    * @return self
+    */
+    public static function getInstance()
+    {
+        if (NULL === static::$instance)
+        {
+            static::$instance = new static();
+        }
+
+        return static::$instance;
+    }
+
+
+    /**
+    * is not allowed to call from outside: private!
+    *
+    */
+    private function __construct()
+    {
+
+    }
+
+
+    /**
+    * prevent the instance from being cloned
+    *
+    * @return void
+    */
+    private function __clone()
+    {
+
+    }
+
+
+    /**
+    * prevent from being unserialized
+    *
+    * @return void
+    */
+    private function __wakeup()
+    {
+
+    }
 
 
     /**
