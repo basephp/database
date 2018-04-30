@@ -12,9 +12,9 @@ class Database
 
 
     /**
-	* Setting the database object
-	*
-	*/
+    * Setting the database object
+    *
+    */
     public function setDatabase($db)
     {
         $this->db = $db;
@@ -22,12 +22,12 @@ class Database
 
 
     /**
-	* Calls into the database obbject
-	*
-	*/
-	public function __call($method, $parameters)
-	{
-		return $this->db->{$method}(...$parameters);
-	}
+    * Calls into the database obbject
+    *
+    */
+    public function __call($method, $parameters)
+    {
+        return $this->db->{$method}(...$parameters);
+    }
 
 }

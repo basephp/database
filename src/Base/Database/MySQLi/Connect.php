@@ -12,40 +12,40 @@ class Connect extends \mysqli
     /**
     * This Function overwrites the mysql query function but should return the same objects
     */
-	public function query($query = '', $resultmode = NULL)
-	{
-		if (preg_match('/^\s*(INSERT|UPDATE|SELECT)\s/i',$query))
+    public function query($query = '', $resultmode = NULL)
+    {
+        if (preg_match('/^\s*(INSERT|UPDATE|SELECT)\s/i',$query))
         {
-			if ($query != '')
+            if ($query != '')
             {
-				$this->return = parent::query($query, $resultmode);
-			}
-		}
+                $this->return = parent::query($query, $resultmode);
+            }
+        }
 
-		return $this;
-	}
+        return $this;
+    }
 
 
     /**
     * row
     */
-	public function row()
+    public function row()
     {
-		if ($this->return)
+        if ($this->return)
         {
             return $this->return->fetch_object();
-		}
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 
     /**
     * results
     */
-	public function results($returnType = 'object')
+    public function results($returnType = 'object')
     {
-		if ($this->return)
+        if ($this->return)
         {
             if ($returnType == 'object')
             {
@@ -56,10 +56,10 @@ class Connect extends \mysqli
             {
                 return $this->resultsArray($this->return);
             }
-		}
+        }
 
-		return false;
-	}
+        return false;
+    }
 
 
     /**

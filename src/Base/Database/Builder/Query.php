@@ -134,10 +134,10 @@ class Query extends Database
 
 
     /**
-	 * WHERE
-	 *
-     * @return $this
-	 */
+    * WHERE
+    *
+    * @return $this
+    */
 	public function where($key, $value = NULL)
 	{
         if ( ! is_array($key))
