@@ -4,11 +4,11 @@ Database and Query Builder for BasePHP
 Installation:
 ---------------
 
-**(1)** Install using composer
+**(1) Install using composer**
 
 `php composer.phar require basephp/database dev-master`
 
-**(2)** Add database to your `.env` file
+**(2) Add database to your `.env` file**
 
 ```
 DB_USER=admin
@@ -17,7 +17,7 @@ DB_HOST=127.0.0.1
 DB_NAME=database
 ```
 
-**(3)** Add the `example_config.php` to your `config/` directory (rename it to `db.php`)
+**(3) Add the `example_db.php` to your `config/` directory**
 
 And now you should have full access to your database and all query builder methods below.
 
@@ -59,7 +59,8 @@ $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 
 ```
 
-### Query Builder Methods:
+Query Builder:
+---------------
 
 *These methods are stackable*
 
@@ -77,7 +78,8 @@ $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 |`group()`        | *Optional*                  | `GROUP BY fields`   |
 
 
-### Query Result Methods:
+Query Result:
+---------------
 
 *These methods return database results*
 
@@ -90,3 +92,9 @@ $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 |`delete()`       | Run the `DELETE` query                        |
 |`insert()`       | Run the `INSERT` query                        |
 |`count()`        | Run a `COUNT` query and return the number     |
+
+
+Database Support
+---------------
+
+*Currently only supports MySQLi connections*
