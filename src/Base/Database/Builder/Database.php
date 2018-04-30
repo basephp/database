@@ -27,7 +27,7 @@ class Database
 	*/
 	public function __call($method, $parameters)
 	{
-		$this->db->{$method}(...$parameters);
+		return $this->db->{$method}(...$parameters);
 	}
 
 }

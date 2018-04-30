@@ -16,6 +16,6 @@ class Database extends Middleware
         DB::setDatabase($db->{config('db.name')});
 
         // add the database to the app instance
-        app()->register('db',$db);
+        app()->register('db',$db->{config('db.name')});
     }
 }
