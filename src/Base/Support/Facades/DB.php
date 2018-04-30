@@ -6,7 +6,6 @@ class DB extends \Base\Support\Facades\Facade
 {
     protected static function getClass()
     {
-        return \Base\Database\Query::class;
+        return \Base\Database\Builder\Query::class;
     }
 }
- 
