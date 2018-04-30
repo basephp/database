@@ -79,10 +79,11 @@ class Connect
     public function setConnection($driver = 'MySQLi', $handle = 'default', $host = '127.0.0.1', $database = '', $user = NULL, $pass = NULL)
     {
         $this->connection[$handle] = [
+            'driver'   => $driver,
             'host' 	   => $host,
             'database' => $database,
-            'user'     => $userName,
-            'pass'     => $password
+            'user'     => $user,
+            'pass'     => $pass
         ];
 
         return $this;
