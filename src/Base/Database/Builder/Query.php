@@ -387,7 +387,7 @@ class Query extends Database
     */
     public function row($test = false)
     {
-        if ($test==true) return $this->get($sql);
+        if ($test==true) return $this->get($test);
 
         return $this->get($sql)->row();
     }
@@ -399,9 +399,9 @@ class Query extends Database
     */
     public function results($test = false)
     {
-        if ($test==true) return $this->get($sql);
+        if ($test==true) return $this->get($test);
 
-        return $this->get($sql)->results();
+        return $this->get($test)->results();
     }
 
 
@@ -411,9 +411,9 @@ class Query extends Database
     */
     public function first($test = false)
     {
-        if ($test==true) return $this->get($sql);
+        if ($test==true) return $this->get($test);
 
-        return $this->get($sql)->results()[0] ?? false;
+        return $this->get($test)->results()[0] ?? false;
     }
 
 
