@@ -389,7 +389,7 @@ class Query extends Database
     {
         if ($test==true) return $this->get($test);
 
-        return $this->get($sql)->row();
+        return $this->get($test)->row();
     }
 
 
