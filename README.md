@@ -78,20 +78,32 @@ Query Builder:
 |`group()`        | *Optional*                  | `GROUP BY fields`   |
 
 
-Query Result:
+`READ` Queries:
 ---------------
 
 *These methods return database results*
 
+|Method             | Description                                   |
+|---                |---                                            |
+|`row()`            | Run the query and return one item             |
+|`results()`        | Run the query and return all items            |
+|`first()`          | Run the query and return the first item       |
+|`count()`          | Run a `COUNT` query and return the number     |
+|`sum('field')`     | Get the `SUM(field)` of a table               |
+|`avg('field')`     | Get the `AVG(field)` of a table               |
+|`min('field')`     | Get the `MIN(field)` of a table               |
+|`max('field')`     | Get the `MAX(field)` of a table               |
+
+`WRITE` Queries:
+---------------
+
+*These methods write to the database*
+
 |Method           | Description                                   |
 |---              |---                                            |
-|`row()`          | Run the query and return one item             |
-|`results()`      | Run the query and return all items            |
-|`first()`        | Run the query and return the first item       |
 |`update()`       | Run the `UPDATE` query                        |
 |`delete()`       | Run the `DELETE` query                        |
 |`insert()`       | Run the `INSERT` query                        |
-|`count()`        | Run a `COUNT` query and return the number     |
 
 
 Database Support

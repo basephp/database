@@ -521,6 +521,69 @@ class Query extends Database
 
 
     /**
+	 * avg
+	 *
+	 */
+	protected function eqnumber($field, $eq)
+	{
+        if (empty($this->from) || !$this->from) return false;
+        if ($eq == '') return false;
+
+        $sql = 'SELECT '.strtoupper($eq)."(".$field.") AS eqnumber FROM ".implode(',', $this->from);
+        $sql = $this->sqlWhere($sql);
+        $sql = $this->sqlGroupBy($sql);
+        $sql = $this->sqlOrderBy($sql);
+        $sql = $this->sqlLimit($sql);
+
+        $this->resetAll();
+
+        $count = $this->db->query($sql)->row();
+
+		return $count->eqnumber ?? 0;
+	}
+
+
+    /**
+	 * avg
+	 *
+	 */
+	public function avg($field)
+	{
+		return $this->eqnumber($field, 'AVG');
+	}
+
+
+    /**
+	 * max
+	 *
+	 */
+	public function max($field)
+	{
+        return $this->eqnumber($field, 'MAX');
+	}
+
+
+    /**
+	 * min
+	 *
+	 */
+	public function min($field)
+	{
+        return $this->eqnumber($field, 'MIN');
+	}
+
+
+    /**
+	 * sum
+	 *
+	 */
+	public function sum($field)
+	{
+        return $this->eqnumber($field, 'SUM');
+	}
+
+
+    /**
     * Clear out all database items from table
     *
     */
