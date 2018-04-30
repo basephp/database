@@ -57,6 +57,10 @@ DB::table('users')->set([
 $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 
 
+// increase this users "page view" count
+DB::table('users')->where('id',9983287)->increment('page_view',1);
+
+
 ```
 
 `SQL` Builder:
@@ -99,12 +103,14 @@ $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 
 *These methods write to the database*
 
-|Method           | Description                                   |
-|---              |---                                            |
-|`update()`       | Run the `UPDATE` query                        |
-|`delete()`       | Run the `DELETE` query                        |
-|`insert()`       | Run the `INSERT` query                        |
-|`truncate()`     | Run the `TRUNCATE` query                      |
+|Method                       | Description                                   |
+|---                          |---                                            |
+|`update()`                   | Run the `UPDATE` query                        |
+|`delete()`                   | Run the `DELETE` query                        |
+|`insert()`                   | Run the `INSERT` query                        |
+|`truncate()`                 | Run the `TRUNCATE` query                      |
+|`increment(field, value)`    | Run the `UPDATE` query                        |
+|`decrement(field, value)`    | Run the `UPDATE` query                        |
 
 
 Database Support

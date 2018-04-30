@@ -464,6 +464,48 @@ class Query extends Database
     * Run the query and return the results
     *
     */
+    public function increment($field, $number, $test = false)
+    {
+        return $this->eqmath($field, $number, '+', $test);
+    }
+
+
+    /**
+    * Run the query and return the results
+    *
+    */
+    public function decrement($field, $number, $test = false)
+    {
+        return $this->eqmath($field, $number, '-', $test);
+    }
+
+
+    /**
+    * Run the query and return the results
+    *
+    */
+    public function eqmath($field, $number, $operator = '+', $test = false)
+    {
+        if (empty($this->from) || !$this->from) return false;
+
+        $sql  = "UPDATE ".implode(',', $this->from);
+        $sql .= " SET ".$field." = ".$field.$operator.$number." ";
+
+        $sql  = $this->sqlWhere($sql);
+        $sql  = $this->sqlLimit($sql);
+
+        $this->resetAll();
+
+        if ($test==true) return $sql;
+
+        return $this->db->query($sql);
+    }
+
+
+    /**
+    * Run the query and return the results
+    *
+    */
     public function delete($test = false)
     {
         if (empty($this->from) || !$this->from) return false;
@@ -500,27 +542,6 @@ class Query extends Database
 
 
     /**
-    * Run the query and return the results
-    *
-    */
-    public function count($test = false)
-    {
-        if (empty($this->from) || !$this->from) return false;
-
-        $sql = "COUNT (*) AS total FROM ".implode(',', $this->from);
-        $sql = $this->sqlWhere($sql);
-
-        $this->resetAll();
-
-        if ($test==true) return $sql;
-
-        $count = $this->db->query($sql)->row();
-
-        return $count->total ?? 0;
-    }
-
-
-    /**
 	 * avg
 	 *
 	 */
@@ -540,6 +561,16 @@ class Query extends Database
         $count = $this->db->query($sql)->row();
 
 		return $count->eqnumber ?? 0;
+	}
+
+
+    /**
+	 * count
+	 *
+	 */
+	public function count()
+	{
+		return $this->eqnumber("*", 'COUNT');
 	}
 
 
