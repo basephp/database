@@ -209,7 +209,7 @@ class Query extends Database
             $this->where[] = [
                 'f' => $k,
                 'o' => $o,
-                'v' => $v ? $this->escape($v) : NULL
+                'v' => ($v !== NULL) ? $this->escape($v) : NULL
             ];
 
         }
@@ -243,7 +243,7 @@ class Query extends Database
             $this->having[] = [
                 'f' => $k,
                 'o' => $op ?? '',
-                'v' => $v ? $this->escape($v) : NULL
+                'v' => ($v !== NULL) ? $this->escape($v) : NULL
             ];
 
         }
