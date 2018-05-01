@@ -125,6 +125,17 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 |`truncate()`                 | Run the `TRUNCATE` query                      |
 
 
+Utility Methods:
+---------------
+
+|Method                       | Description                                     |
+|---                          |---                                              |
+|`resetAll()`                 | Resets the query SQL, also called on `table()`  |
+|`escape(string)`             | Escape a string for database injection          |
+
+*Note: all values passed into query methods (not custom SQL's) automatically run through `escape()`
+
+
 Database Support
 ---------------
 

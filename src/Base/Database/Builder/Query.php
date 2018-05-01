@@ -45,7 +45,15 @@ class Query extends Database
     *
     * @var array
     */
-    protected $groupBy = [];
+    protected $group = [];
+
+
+    /**
+    * ORDER BY
+    *
+    * @var array
+    */
+    public $order = [];
 
 
     /**
@@ -73,14 +81,6 @@ class Query extends Database
 
 
     /**
-    * ORDER BY
-    *
-    * @var array
-    */
-    public $orderBy = [];
-
-
-    /**
     * SET
     *
     * @var array
@@ -92,6 +92,7 @@ class Query extends Database
     /**
     * SELECT
     *
+    * @param mixed $select
     * @return $this
     */
     public function select($select = '*')
@@ -118,6 +119,7 @@ class Query extends Database
     /**
     * FROM
     *
+    * @param mixed $from
     * @return $this
     */
     public function table($from)
@@ -148,7 +150,6 @@ class Query extends Database
     /**
     * JOIN
     *
-    * Build the JOIN SQL
     *
     * @param string $table
     * @param string $condition
@@ -181,6 +182,8 @@ class Query extends Database
     /**
     * WHERE
     *
+    * @param mixed $key
+    * @param mixed $value
     * @return $this
     */
     public function where($key, $value = NULL)
@@ -221,6 +224,8 @@ class Query extends Database
     /**
     * HAVING
     *
+    * @param mixed $key
+    * @param mixed $value
     * @return $this
     */
     public function having($key, $value = NULL)
@@ -255,9 +260,8 @@ class Query extends Database
     /**
     * WHERE IN (...)
     *
-    * ->in('field', [1,2,3])
-    *
-    *
+    * @param string $key
+    * @param array $values
     * @return $this
     */
     public function in($key, $values = [])
@@ -288,6 +292,8 @@ class Query extends Database
     /**
     * WHERE NOT IN (...)
     *
+    * @param string $key
+    * @param array $values
     * @return $this
     */
     public function not($key, $values = [])
@@ -318,6 +324,8 @@ class Query extends Database
     /**
     * ORDER BY
     *
+    * @param mixed $orderby
+    * @param string $direction
     * @return $this
     */
     public function order($orderby, $direction = '')
@@ -346,7 +354,7 @@ class Query extends Database
             {
                 $val = preg_match('/\s+(ASC|DESC)$/i', rtrim($field), $match, PREG_OFFSET_CAPTURE);
 
-                $this->orderBy[] = [
+                $this->order[] = [
                     'field' => ($val) ? ltrim(substr($field, 0, $match[0][1])) : $field,
                     'dir' => ($val) ? $match[1][0] : $direction
                 ];
@@ -360,6 +368,7 @@ class Query extends Database
     /**
     * GROUP BY
     *
+    * @param mixed $groupby
     * @return $this
     */
     public function group($groupby)
@@ -375,7 +384,7 @@ class Query extends Database
 
             if ($val !== '')
             {
-                $this->groupBy[] = $val;
+                $this->group[] = $val;
             }
         }
 
@@ -387,13 +396,15 @@ class Query extends Database
     /**
     * LIMIT
     *
+    * @param int $limit
+    * @param int $offset
     * @return $this
     */
-    public function limit(int $value = null, int $offset = 0)
+    public function limit(int $limit = null, int $offset = 0)
     {
-        if ( ! is_null($value))
+        if ( ! is_null($limit))
         {
-            $this->limit = $value;
+            $this->limit = $limit;
         }
 
         if ( ! empty($offset))
@@ -408,6 +419,7 @@ class Query extends Database
     /**
     * OFFSET
     *
+    * @param int $offset
     * @return $this
     */
     public function offset($offset)
@@ -424,6 +436,8 @@ class Query extends Database
     /**
     * SET
     *
+    * @param mixed $set
+    * @param mixed $value
     * @return $this
     */
     protected function set($set, $value = NULL)
@@ -488,7 +502,7 @@ class Query extends Database
 
 
     /**
-    * Run the query and return the results
+    * Run the query and return the FIRST result
     *
     */
     public function first($test = false)
@@ -500,8 +514,22 @@ class Query extends Database
 
 
     /**
+    * Run the query and return the LAST result
+    *
+    */
+    public function last($test = false)
+    {
+        if ($test==true) return $this->get(true);
+
+        return end($this->get($test)->results()) ?? false;
+    }
+
+
+    /**
     * Escape the string
     *
+    * @param string $str
+    * @return string
     */
     public function escape(string $str = '')
     {
@@ -626,38 +654,6 @@ class Query extends Database
 
 
     /**
-    * avg
-    *
-    */
-    protected function eqnumber($field, $eq)
-    {
-        if (empty($this->from) || !$this->from)
-        {
-            $this->resetAll();
-            return false;
-        }
-
-        if ($eq == '')
-        {
-            $this->resetAll();
-            return false;
-        }
-
-        $sql = 'SELECT '.strtoupper($eq)."(".$field.") AS eqnumber FROM ".implode(',', $this->from);
-        $sql = $this->sqlWhere($sql);
-        $sql = $this->sqlGroupBy($sql);
-        $sql = $this->sqlOrderBy($sql);
-        $sql = $this->sqlLimit($sql);
-
-        $this->resetAll();
-
-        $count = $this->db->query($sql)->row();
-
-        return $count->eqnumber ?? 0;
-    }
-
-
-    /**
     * count
     *
     */
@@ -733,14 +729,43 @@ class Query extends Database
 
 
     /**
-    * Build the SELECT statement
-    *
-    * Generates a query string based on which functions were used.
+    * Generates a FULL SQL query string.
     * Should not be called directly.
     *
-    * @param    bool $select_override
+    */
+    protected function eqnumber($field, $eq)
+    {
+        if (empty($this->from) || !$this->from)
+        {
+            $this->resetAll();
+            return false;
+        }
+
+        if ($eq == '')
+        {
+            $this->resetAll();
+            return false;
+        }
+
+        $sql = 'SELECT '.strtoupper($eq)."(".$field.") AS eqnumber FROM ".implode(',', $this->from);
+        $sql = $this->sqlWhere($sql);
+        $sql = $this->sqlGroupBy($sql);
+        $sql = $this->sqlOrderBy($sql);
+        $sql = $this->sqlLimit($sql);
+
+        $this->resetAll();
+
+        $count = $this->db->query($sql)->row();
+
+        return $count->eqnumber ?? 0;
+    }
+
+
+    /**
+    * Generates a FULL SQL query string.
+    * Should not be called directly.
     *
-    * @return    string
+    * @return string
     */
     protected function buildSelect()
     {
@@ -784,8 +809,8 @@ class Query extends Database
 
 
     /**
-    * BUILD SQL "SET"
-    *
+    * Generates the "SET" SQL query string.
+    * Should not be called directly.
     *
     * @param string $sql
     * @return string
@@ -810,8 +835,8 @@ class Query extends Database
 
 
     /**
-    * BUILD SQL "WHERE"
-    *
+    * Generates the "WHERE" SQL query string.
+    * Should not be called directly.
     *
     * @param string $sql
     * @return string
@@ -858,7 +883,8 @@ class Query extends Database
 
 
     /**
-    * BUILD SQL "HAVING"
+    * Generates the "HAVING" SQL query string.
+    * Should not be called directly.
     *
     *
     * @param string $sql
@@ -893,7 +919,8 @@ class Query extends Database
 
 
     /**
-    * BUILD SQL "ORDER BY"
+    * Generates the "ORDER BY" SQL query string.
+    * Should not be called directly.
     *
     *
     * @param string $sql
@@ -901,10 +928,10 @@ class Query extends Database
     */
     protected function sqlOrderBy($sql)
     {
-        if (!$this->orderBy) return $sql;
+        if (!$this->order) return $sql;
 
         $orderBy = [];
-        foreach($this->orderBy as $order)
+        foreach($this->order as $order)
         {
             $orderBy[] = $order['field'] . ' ' . $order['dir'];
         }
@@ -917,7 +944,8 @@ class Query extends Database
 
 
     /**
-    * BUILD SQL "GROUP BY"
+    * Generates the "GROUP BY" SQL query string.
+    * Should not be called directly.
     *
     *
     * @param string $sql
@@ -925,9 +953,9 @@ class Query extends Database
     */
     protected function sqlGroupBy($sql)
     {
-        if (!$this->groupBy) return $sql;
+        if (!$this->group) return $sql;
 
-        return $sql . " GROUP BY " . implode(',', $this->groupBy);
+        return $sql . " GROUP BY " . implode(',', $this->group);
     }
 
 
@@ -935,7 +963,8 @@ class Query extends Database
 
 
     /**
-    * BUILD SQL "LIMIT" (and OFFSET)
+    * Generates the "LIMIT" SQL query string.
+    * Should not be called directly.
     *
     *
     * @param string $sql
@@ -953,27 +982,11 @@ class Query extends Database
 
 
     /**
-    * Resets the class variable values to their defaults
-    *
-    * @param array $items
-    */
-    protected function reset($items)
-    {
-        foreach ($items as $item => $default_value)
-        {
-            $this->$item = $default_value;
-        }
-    }
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
     * Reset all the SQL statement variables
     *
+    * @return $this
     */
-    protected function resetAll()
+    public function resetAll()
     {
         $this->reset([
             'select'   => [],
@@ -981,12 +994,31 @@ class Query extends Database
             'from'     => [],
             'join'     => [],
             'having'   => [],
-            'groupBy'  => [],
-            'orderBy'  => [],
+            'group'    => [],
+            'order'    => [],
             'set'      => [],
             'limit'    => false,
             'offset'   => false
         ]);
+
+        return $this;
+    }
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+    * Resets the class variable values to their defaults
+    *
+    * @param array $items
+    */
+    protected function reset(array $items)
+    {
+        foreach ($items as $item => $default_value)
+        {
+            $this->$item = $default_value;
+        }
     }
 
 
