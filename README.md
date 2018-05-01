@@ -28,7 +28,6 @@ Usage Examples:
 ---------------
 
 ```php
-
 // add the access to the DB::class
 use \Base\Support\Facades\DB;
 
@@ -78,10 +77,9 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 // Get the average price of all ebooks
 $avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
 
-
 ```
 
-`SQL` Builder:
+Query Builder:
 ---------------
 
 *These methods are stackable*
@@ -101,13 +99,13 @@ $avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
 |`having()`       | *Optional*                    | `HAVING`             |
 |`distinct()`     | *Optional*                    | `SELECT DISTINCT`    |
 
-*Note: Calling `table()` will reset the current SQL. For SQL protection, `table()` is required to be first in chain.
+*Note: For every new query, first use the `table()` method.*
 
 
 `READ` Queries:
 ---------------
 
-*These methods return database results*
+*These methods execute "read" queries and return database results*
 
 |Method             | Description                                                 |
 |---                |---                                                          |
@@ -123,7 +121,7 @@ $avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
 `WRITE` Queries:
 ---------------
 
-*These methods write to the database*
+*These methods execute "write" queries*
 
 |Method                       | Description                                   |
 |---                          |---                                            |
