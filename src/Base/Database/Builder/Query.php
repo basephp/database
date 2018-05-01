@@ -122,7 +122,7 @@ class Query extends Database
     */
     public function table($from)
     {
-        // protect the user and force a reset...
+        // protect the SQL and force a reset since we're running a new query.
         $this->resetAll();
 
         if (is_string($from))
@@ -195,17 +195,18 @@ class Query extends Database
 
         foreach ($key as $k => $v)
         {
-            if ($v !== null)
+            if ($v !== NULL)
             {
                 $op = $this->getOperator($k);
-                $k = trim(str_replace($op, '', $k));
+                $k  = trim(str_replace($op, '', $k));
 
                 if (!empty($op))
                 {
                     $o = $op;
                 }
             }
-            elseif ( ! $this->hasOperator($k))
+
+            /*elseif ( ! $this->hasOperator($k))
             {
                 // assign this "IS NULL" (missing operator/value)
                 $k .= ' IS NULL';
@@ -213,12 +214,12 @@ class Query extends Database
             elseif (preg_match('/\s*(!?=|<>|IS(?:\s+NOT)?)\s*$/i', $k, $match, PREG_OFFSET_CAPTURE))
             {
                 $k = substr($k, 0, $match[0][1]) . ($match[1][0] === '=' ? ' IS NULL' : ' IS NOT NULL');
-            }
+            }*/
 
             $this->where[] = [
                 'f' => $k,
                 'o' => $o,
-                'v' => $this->escape($v)
+                'v' => $v ? $this->escape($v) : NULL
             ];
 
         }
@@ -795,7 +796,7 @@ class Query extends Database
         $start = false;
         foreach($this->where as $where)
         {
-            if (!is_array($where['v']) && !is_numeric($where['v'])) $where['v'] = "'".$where['v']."'";
+            if (!is_array($where['v']) && !is_numeric($where['v']) && !is_null($where['v'])) $where['v'] = "'".$where['v']."'";
 
             $sql .= (($start==false) ? ' WHERE' : ' AND');
 
@@ -811,7 +812,14 @@ class Query extends Database
             }
             else
             {
-                $sql .= ' '.$where['f'].' '.$where['o'].' '.$where['v'];
+                if (!is_null($where['v']))
+                {
+                    $sql .= ' '.$where['f'].' '.$where['o'].' '.$where['v'];
+                }
+                else
+                {
+                    $sql .= ' '.$where['f'];
+                }
             }
 
             $start = true;
@@ -909,7 +917,7 @@ class Query extends Database
     {
         $this->reset([
             'select'   => [],
-            'where'	   => [],
+            'where'    => [],
             'from'     => [],
             'join'     => [],
             'having'   => [],

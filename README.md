@@ -36,10 +36,13 @@ $users = DB::table('users')->select(['id','name'])->where(['status'=>'enabled'])
 // get just a single item (user) from the db table by id
 $user = DB::table('users')->where('id',32212)->row();
 
+// Write a RAW SQL Statement? Find all users that have a gmail email address
+$user = DB::table('users')->where('email LIKE "%gmail.com" ')->results();
+
 // Delete the item that matches an ID
 DB::table('users')->where('id',7455)->delete();
 
-// Update
+// Update user's name by ID
 DB::table('users')
     ->where('id',1233)
     ->update(['name' => 'John']);
