@@ -1,6 +1,6 @@
 <?php namespace Base\Database;
 
-use Base\Database\MySQLi\Connect AS MySQLi;
+use Base\Database\MySQLi\Connection AS MySQLi;
 
 /**
 * This class handles multiple Database connections and allows you to utilise lazy connections

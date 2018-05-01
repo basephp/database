@@ -1,4 +1,4 @@
-<?php namespace Base\Database\Builder;
+<?php namespace Base\Database\Query;
 
 use Base\Support\Collection;
 
@@ -7,8 +7,15 @@ use Base\Support\Collection;
 * Class Builder
 *
 */
-class Query extends Database
+class Builder
 {
+
+    /**
+     * The database connection instance.
+     *
+     * @var \Base\Database\Connection
+     */
+    public $connection;
 
     /**
     * SELECT
@@ -98,6 +105,44 @@ class Query extends Database
     protected $set = [];
 
 
+    /**
+     * New query builder instance.
+     *
+     * @return void
+     */
+    public function __construct($connection)
+    {
+        $this->connection = $connection;
+    }
+
+
+    /**
+    * FROM
+    *
+    * @param mixed $from
+    * @return $this
+    */
+    public function from($from)
+    {
+        if (is_string($from))
+        {
+            $from = explode(',', $from);
+        }
+
+        foreach ($from as $val)
+        {
+            $val = trim($val);
+
+            if ($val !== '' && !in_array($val, $this->from))
+            {
+                $this->from[] = $val;
+            }
+        }
+
+        return $this;
+    }
+
+
     //--------------------------------------------------------------------
 
 
@@ -121,39 +166,6 @@ class Query extends Database
             if ($val !== '' && !in_array($val, $this->select))
             {
                 $this->select[] = $val;
-            }
-        }
-
-        return $this;
-    }
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
-    * FROM
-    *
-    * @param mixed $from
-    * @return $this
-    */
-    public function table($from)
-    {
-        // protect the SQL and force a reset since we're running a new query.
-        $this->resetAll();
-
-        if (is_string($from))
-        {
-            $from = explode(',', $from);
-        }
-
-        foreach ($from as $val)
-        {
-            $val = trim($val);
-
-            if ($val !== '' && !in_array($val, $this->from))
-            {
-                $this->from[] = $val;
             }
         }
 
@@ -534,11 +546,9 @@ class Query extends Database
     {
         $sql = $this->buildSelect();
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return (new Collection($this->db->query($sql)->results())) ?? false;
+        return (new Collection($this->connection->query($sql)->results())) ?? false;
     }
 
 
@@ -553,11 +563,9 @@ class Query extends Database
     {
         $sql = $this->buildSelect();
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return $this->db->query($sql)->results()[0] ?? false;
+        return $this->connection->query($sql)->results()[0] ?? false;
     }
 
 
@@ -572,11 +580,9 @@ class Query extends Database
     {
         $sql = $this->buildSelect();
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return array_slice($this->db->query($sql)->results(),-1)[0] ?? false;
+        return array_slice($this->connection->query($sql)->results(),-1)[0] ?? false;
     }
 
 
@@ -599,11 +605,9 @@ class Query extends Database
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlLimit($sql);
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return $this->db->query($sql);
+        return $this->connection->query($sql);
     }
 
 
@@ -624,11 +628,9 @@ class Query extends Database
         $sql = "INSERT INTO ".implode(',', $this->from);
         $sql = $this->sqlSet($sql);
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return $this->db->query($sql);
+        return $this->connection->query($sql);
     }
 
 
@@ -667,11 +669,7 @@ class Query extends Database
     */
     public function eqmath($field, $number, $operator = '+', $test = false)
     {
-        if (empty($this->from) || !$this->from)
-        {
-            $this->resetAll();
-            return false;
-        }
+        if (empty($this->from) || !$this->from) return false;
 
         $sql  = "UPDATE ".implode(',', $this->from);
         $sql .= " SET ".$field." = ".$field.$operator.$number." ";
@@ -679,11 +677,9 @@ class Query extends Database
         $sql  = $this->sqlWhere($sql);
         $sql  = $this->sqlLimit($sql);
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return $this->db->query($sql);
+        return $this->connection->query($sql);
     }
 
 
@@ -696,21 +692,15 @@ class Query extends Database
     */
     public function delete($test = false)
     {
-        if (empty($this->from) || !$this->from)
-        {
-            $this->resetAll();
-            return false;
-        }
+        if (empty($this->from) || !$this->from) return false;
 
         $sql = "DELETE FROM ".implode(',', $this->from);
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlLimit($sql);
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return $this->db->query($sql);
+        return $this->connection->query($sql);
     }
 
 
@@ -788,19 +778,13 @@ class Query extends Database
     */
     public function truncate($test = false)
     {
-        if (empty($this->from) || !$this->from)
-        {
-            $this->resetAll();
-            return false;
-        }
+        if (empty($this->from) || !$this->from) return false;
 
         $sql = "TRUNCATE ".implode(',', $this->from);
 
-        $this->resetAll();
-
         if ($test==true) return $sql;
 
-        return $this->db->query($sql);
+        return $this->connection->query($sql);
     }
 
 
@@ -814,17 +798,9 @@ class Query extends Database
     */
     protected function eqnumber($field, $eq)
     {
-        if (empty($this->from) || !$this->from)
-        {
-            $this->resetAll();
-            return false;
-        }
+        if (empty($this->from) || !$this->from) return false;
 
-        if ($eq == '')
-        {
-            $this->resetAll();
-            return false;
-        }
+        if ($eq == '') return false;
 
         $sql = 'SELECT '.strtoupper($eq)."(".$field.") AS eqnumber FROM ".implode(',', $this->from);
         $sql = $this->sqlWhere($sql);
@@ -832,9 +808,7 @@ class Query extends Database
         $sql = $this->sqlOrderBy($sql);
         $sql = $this->sqlLimit($sql);
 
-        $this->resetAll();
-
-        $count = $this->db->query($sql)->row();
+        $count = $this->connection->query($sql)->row();
 
         return $count->eqnumber ?? 0;
     }
@@ -1064,34 +1038,6 @@ class Query extends Database
 
 
     /**
-    * Reset all the SQL statement variables
-    *
-    * @return $this
-    */
-    public function resetAll()
-    {
-        $this->reset([
-            'select'   => [],
-            'where'    => [],
-            'from'     => [],
-            'join'     => [],
-            'having'   => [],
-            'group'    => [],
-            'order'    => [],
-            'set'      => [],
-            'limit'    => false,
-            'offset'   => false,
-            'distinct' => false
-        ]);
-
-        return $this;
-    }
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
     * Escape the string
     *
     * @param string $str
@@ -1099,24 +1045,7 @@ class Query extends Database
     */
     public function escape(string $str = '')
     {
-        return $this->db->real_escape_string($str);
-    }
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
-    * Resets the class variable values to their defaults
-    *
-    * @param array $items
-    */
-    protected function reset(array $items)
-    {
-        foreach ($items as $item => $default_value)
-        {
-            $this->$item = $default_value;
-        }
+        return $this->connection->real_escape_string($str);
     }
 
 

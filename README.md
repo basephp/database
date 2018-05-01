@@ -102,7 +102,7 @@ Query Builder:
 *Note: For every new query, first use the `table()` method.*
 
 
-`READ` Queries:
+Execute Queries:
 ---------------
 
 *These methods execute "read" queries and return database results*
@@ -118,8 +118,6 @@ Query Builder:
 |`min('field')`     | Get the `MIN(field)` of a table and return the number       |
 |`max('field')`     | Get the `MAX(field)` of a table and return the number       |
 
-`WRITE` Queries:
----------------
 
 *These methods execute "write" queries*
 

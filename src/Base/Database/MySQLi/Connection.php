@@ -4,7 +4,7 @@
 /**
  * Extends mysqli and adds the ability to easily apc cache queries
  */
-class Connect extends \mysqli
+class Connection extends \mysqli
 {
 	private $return = false;
 
@@ -12,14 +12,11 @@ class Connect extends \mysqli
     /**
     * This Function overwrites the mysql query function but should return the same objects
     */
-    public function query($query = '', $resultmode = NULL)
+    public function query($query, $resultmode = NULL)
     {
-        if (preg_match('/^\s*(INSERT|UPDATE|SELECT)\s/i',$query))
+        if ($query != '')
         {
-            if ($query != '')
-            {
-                $this->return = parent::query($query, $resultmode);
-            }
+            $this->return = parent::query($query, $resultmode);
         }
 
         return $this;
