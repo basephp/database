@@ -206,19 +206,43 @@ class Query extends Database
                 }
             }
 
-            /*elseif ( ! $this->hasOperator($k))
-            {
-                // assign this "IS NULL" (missing operator/value)
-                $k .= ' IS NULL';
-            }
-            elseif (preg_match('/\s*(!?=|<>|IS(?:\s+NOT)?)\s*$/i', $k, $match, PREG_OFFSET_CAPTURE))
-            {
-                $k = substr($k, 0, $match[0][1]) . ($match[1][0] === '=' ? ' IS NULL' : ' IS NOT NULL');
-            }*/
-
             $this->where[] = [
                 'f' => $k,
                 'o' => $o,
+                'v' => $v ? $this->escape($v) : NULL
+            ];
+
+        }
+
+        return $this;
+    }
+
+
+    /**
+    * HAVING
+    *
+    * @return $this
+    */
+    public function having($key, $value = NULL)
+    {
+        if ( ! is_array($key))
+        {
+            $key = [$key => $value];
+        }
+
+        foreach ($key as $k => $v)
+        {
+            if ($v !== NULL)
+            {
+                $op = $this->getOperator($k);
+                $k  = trim(str_replace($op, '', $k));
+
+                if (!$op) continue;
+            }
+
+            $this->having[] = [
+                'f' => $k,
+                'o' => $op ?? '',
                 'v' => $v ? $this->escape($v) : NULL
             ];
 
@@ -748,6 +772,7 @@ class Query extends Database
 
         $sql = $this->sqlWhere($sql);
         $sql = $this->sqlGroupBy($sql);
+        $sql = $this->sqlHaving($sql);
         $sql = $this->sqlOrderBy($sql);
         $sql = $this->sqlLimit($sql);
 
@@ -820,6 +845,41 @@ class Query extends Database
                 {
                     $sql .= ' '.$where['f'];
                 }
+            }
+
+            $start = true;
+        }
+
+        return $sql;
+    }
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+    * BUILD SQL "HAVING"
+    *
+    *
+    * @param string $sql
+    * @return string
+    */
+    protected function sqlHaving($sql)
+    {
+        $start = false;
+        foreach($this->having as $having)
+        {
+            if (!is_array($having['v']) && !is_numeric($having['v']) && !is_null($having['v'])) $having['v'] = "'".$having['v']."'";
+
+            $sql .= (($start==false) ? ' HAVING' : ' AND');
+
+            if (!is_null($having['v']))
+            {
+                $sql .= ' '.$having['f'].' '.$having['o'].' '.$having['v'];
+            }
+            else
+            {
+                $sql .= ' '.$having['f'];
             }
 
             $start = true;
