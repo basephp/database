@@ -1,5 +1,5 @@
-# BasePHP Package: Database
-Database and Query Builder for BasePHP
+# BasePHP: Database Package
+Database and Query Builder for BasePHP. *This is an optional package, and is not a requirement for BasePHP*
 
 * [BasePHP Framework](https://github.com/basephp/framework)
 * [BasePHP Example Application](https://github.com/basephp/application)
@@ -92,6 +92,7 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 |`order()`        | *Optional*                    | `ORDER BY fields`    |
 |`group()`        | *Optional*                    | `GROUP BY fields`    |
 |`having()`       | *Optional*                    | `HAVING`             |
+|`distinct()`     | *Optional*                    | `SELECT DISTINCT`    |
 
 *Note: Calling `table()` will reset the current SQL. For SQL protection, `table()` is required to be first in chain.
 

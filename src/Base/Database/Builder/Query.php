@@ -81,12 +81,22 @@ class Query extends Database
 
 
     /**
+    * DISTINCT
+    *
+    * @var bool
+    */
+    protected $distinct = false;
+
+
+    /**
     * SET
     *
     * @var array
     */
     protected $set = [];
 
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -114,6 +124,9 @@ class Query extends Database
 
         return $this;
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -146,6 +159,8 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
 
     /**
     * JOIN
@@ -177,6 +192,9 @@ class Query extends Database
 
         return $this;
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -221,6 +239,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * HAVING
     *
@@ -257,6 +278,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * WHERE IN (...)
     *
@@ -289,6 +313,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * WHERE NOT IN (...)
     *
@@ -319,6 +346,9 @@ class Query extends Database
 
         return $this;
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -365,6 +395,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * GROUP BY
     *
@@ -392,6 +425,8 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
 
     /**
     * LIMIT
@@ -416,6 +451,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * OFFSET
     *
@@ -431,6 +469,28 @@ class Query extends Database
 
         return $this;
     }
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+	 * DISTINCT
+	 *
+	 * Sets the SQL to SELECT DISTINCT,
+	 *
+	 * @param bool $set
+	 * @return $this
+	 */
+	public function distinct($set = true)
+	{
+		$this->distinct = is_bool($set) ? $set : true;
+
+		return $this;
+	}
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -461,6 +521,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Run the query and return the results
     *
@@ -477,6 +540,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Run the query and return the results
     *
@@ -487,6 +553,9 @@ class Query extends Database
 
         return $this->get($test)->row();
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -501,6 +570,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Run the query and return the FIRST result
     *
@@ -511,6 +583,9 @@ class Query extends Database
 
         return $this->get($test)->results()[0] ?? false;
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -525,6 +600,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Escape the string
     *
@@ -535,6 +613,9 @@ class Query extends Database
     {
         return $this->db->real_escape_string($str);
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -561,6 +642,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Run the query and return the results
     *
@@ -583,6 +667,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Run the query and return the results
     *
@@ -593,6 +680,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Run the query and return the results
     *
@@ -601,6 +691,9 @@ class Query extends Database
     {
         return $this->eqmath($field, $number, '-', $test);
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -629,6 +722,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Run the query and return the results
     *
@@ -653,6 +749,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * count
     *
@@ -661,6 +760,9 @@ class Query extends Database
     {
         return $this->eqnumber("*", 'COUNT');
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -673,6 +775,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * max
     *
@@ -681,6 +786,9 @@ class Query extends Database
     {
         return $this->eqnumber($field, 'MAX');
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -693,6 +801,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * sum
     *
@@ -701,6 +812,9 @@ class Query extends Database
     {
         return $this->eqnumber($field, 'SUM');
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -761,6 +875,9 @@ class Query extends Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * Generates a FULL SQL query string.
     * Should not be called directly.
@@ -769,7 +886,7 @@ class Query extends Database
     */
     protected function buildSelect()
     {
-        $sql = 'SELECT ';
+        $sql = ( ! $this->distinct) ? 'SELECT ' : 'SELECT DISTINCT ';
 
         if (empty($this->select))
         {
@@ -998,7 +1115,8 @@ class Query extends Database
             'order'    => [],
             'set'      => [],
             'limit'    => false,
-            'offset'   => false
+            'offset'   => false,
+            'distinct' => false
         ]);
 
         return $this;
