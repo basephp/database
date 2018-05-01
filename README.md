@@ -1,6 +1,10 @@
 # BasePHP Package: Database
 Database and Query Builder for BasePHP
 
+* [BasePHP Framework](https://github.com/basephp/framework)
+* [BasePHP Example Application](https://github.com/basephp/application)
+* **BasePHP Database Package**
+
 Installation:
 ---------------
 
@@ -18,8 +22,6 @@ DB_NAME=database
 ```
 
 **(3) Add the `example_db.php` to your `config/` directory**
-
-And now you should have full access to your database and all query builder methods below.
 
 
 Usage Examples:
@@ -81,7 +83,7 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 |---              |---                            |---                   |
 |`table()`        | Required - **MUST BE FIRST**  | `FROM table`         |
 |`join()`         | *Optional*                    | `JOIN table`         |
-|`select()`       | *Optional* Default: `*`       | `SELECT fields`      |
+|`select()`       | *Optional* - Default: `*`     | `SELECT fields`      |
 |`where()`        | *Optional*                    | `WHERE`              |
 |`in()`           | *Optional*                    | `IN (values)`        |
 |`not()`          | *Optional*                    | `NOT IN (values)`    |
@@ -99,16 +101,16 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 
 *These methods return database results*
 
-|Method             | Description                                   |
-|---                |---                                            |
-|`row()`            | Run the query and return one item             |
-|`results()`        | Run the query and return all items            |
-|`first()`          | Run the query and return the first item       |
-|`count()`          | Run a `COUNT` query and return the number     |
-|`sum('field')`     | Get the `SUM(field)` of a table               |
-|`avg('field')`     | Get the `AVG(field)` of a table               |
-|`min('field')`     | Get the `MIN(field)` of a table               |
-|`max('field')`     | Get the `MAX(field)` of a table               |
+|Method             | Description                                           |
+|---                |---                                                    |
+|`row()`            | Run the query and return one item                     |
+|`results()`        | Run the query and return all items                    |
+|`first()`          | Run the query and return the first item               |
+|`count()`          | Run a `COUNT` query and return the number             |
+|`sum('field')`     | Get the `SUM(field)` of a table and return the number |
+|`avg('field')`     | Get the `AVG(field)` of a table and return the number |
+|`min('field')`     | Get the `MIN(field)` of a table and return the number |
+|`max('field')`     | Get the `MAX(field)` of a table and return the number |
 
 `WRITE` Queries:
 ---------------
@@ -128,15 +130,15 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 Utility Methods:
 ---------------
 
-|Method                       | Description                                     |
-|---                          |---                                              |
-|`resetAll()`                 | Resets the query SQL, also called on `table()`  |
-|`escape(string)`             | Escape a string for database injection          |
+|Method                       | Description                                              |
+|---                          |---                                                       |
+|`resetAll()`                 | Resets the SQL, automatically called on `table()`        |
+|`escape(string)`             | Escape a string for database injection                   |
 
-*Note: all values passed into query methods (not custom SQL's) automatically run through `escape()`
+*Note: all values passed into query methods (not custom SQL's) automatically run through `escape()`*
 
 
 Database Support
 ---------------
 
-*Currently only supports MySQLi connections*
+*Currently only supports MySQL connections*
