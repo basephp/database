@@ -1,5 +1,7 @@
 <?php namespace Base\Database\Builder;
 
+use Base\Support\Collection;
+
 
 /**
 * Class Builder
@@ -536,37 +538,7 @@ class Query extends Database
 
         if ($test==true) return $sql;
 
-        return $this->db->query($sql);
-    }
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
-    * Run the query and return the results
-    *
-    */
-    public function row($test = false)
-    {
-        if ($test==true) return $this->get(true);
-
-        return $this->get($test)->row();
-    }
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
-    * Run the query and return the results
-    *
-    */
-    public function results($test = false)
-    {
-        if ($test==true) return $this->get(true);
-
-        return $this->get($test)->results();
+        return (new Collection($this->db->query($sql)->results())) ?? false;
     }
 
 
@@ -579,9 +551,13 @@ class Query extends Database
     */
     public function first($test = false)
     {
-        if ($test==true) return $this->get(true);
+        $sql = $this->buildSelect();
 
-        return $this->get($test)->results()[0] ?? false;
+        $this->resetAll();
+
+        if ($test==true) return $sql;
+
+        return $this->db->query($sql)->results()[0] ?? false;
     }
 
 
@@ -594,24 +570,13 @@ class Query extends Database
     */
     public function last($test = false)
     {
-        if ($test==true) return $this->get(true);
+        $sql = $this->buildSelect();
 
-        return end($this->get($test)->results()) ?? false;
-    }
+        $this->resetAll();
 
+        if ($test==true) return $sql;
 
-    //--------------------------------------------------------------------
-
-
-    /**
-    * Escape the string
-    *
-    * @param string $str
-    * @return string
-    */
-    public function escape(string $str = '')
-    {
-        return $this->db->real_escape_string($str);
+        return array_slice($this->db->query($sql)->results(),-1)[0] ?? false;
     }
 
 
@@ -1120,6 +1085,21 @@ class Query extends Database
         ]);
 
         return $this;
+    }
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+    * Escape the string
+    *
+    * @param string $str
+    * @return string
+    */
+    public function escape(string $str = '')
+    {
+        return $this->db->real_escape_string($str);
     }
 
 
