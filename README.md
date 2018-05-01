@@ -33,22 +33,27 @@ Usage Examples:
 use \Base\Support\Facades\DB;
 
 // get the test more recent users
-$users = DB::table('users')->select(['id','name'])->where(['status'=>'enabled'])->limit(10)->order('id DESC')->results();
+$users = DB::table('users')
+            ->select(['id','name'])
+            ->where(['status'=>'enabled'])
+            ->limit(10)
+            ->order('id DESC')
+            ->get();
 
 // get just a single item (user) from the db table by id
-$user = DB::table('users')->where('id',32212)->row();
+$user = DB::table('users')->where('id',32212)->first();
 
 // Write a RAW SQL Statement? Find all users that have a gmail email address
-$user = DB::table('users')->where('email LIKE "%gmail.com" ')->results();
+$user = DB::table('users')->where('email LIKE "%gmail.com" ')->get();
 
 // Delete the item that matches an ID
 DB::table('users')->where('id',7455)->delete();
 
-
 // Get all the cities that have over 1,000,000 population
-DB::table('postal_codes')
-    ->group('city')
-    ->having('population > 1000000');
+$cities = DB::table('postal_codes')
+            ->group('city')
+            ->having('population > 1000000')
+            ->get();
 
 
 // Update user's name by ID
@@ -67,9 +72,11 @@ DB::table('users')->insert([
 // Get a total count for how many enabled users are in the database
 $userCount = DB::table('users')->where(['status'=>'enabled'])->count();
 
-
 // increase this users "page view" count
 DB::table('users')->where('id',9983287)->increment('page_view',1);
+
+// Get the average price of all ebooks
+$avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
 
 
 ```
@@ -102,16 +109,16 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 
 *These methods return database results*
 
-|Method             | Description                                           |
-|---                |---                                                    |
-|`row()`            | Run the query and return one item                     |
-|`results()`        | Run the query and return all items                    |
-|`first()`          | Run the query and return the first item               |
-|`count()`          | Run a `COUNT` query and return the number             |
-|`sum('field')`     | Get the `SUM(field)` of a table and return the number |
-|`avg('field')`     | Get the `AVG(field)` of a table and return the number |
-|`min('field')`     | Get the `MIN(field)` of a table and return the number |
-|`max('field')`     | Get the `MAX(field)` of a table and return the number |
+|Method             | Description                                                 |
+|---                |---                                                          |
+|`get()`            | Run the query and return all items as a `Collection` object |
+|`first()`          | Run the query and return the first item                     |
+|`last()`           | Run the query and return the last item                      |
+|`count()`          | Run a `COUNT` query and return the number                   |
+|`sum('field')`     | Get the `SUM(field)` of a table and return the number       |
+|`avg('field')`     | Get the `AVG(field)` of a table and return the number       |
+|`min('field')`     | Get the `MIN(field)` of a table and return the number       |
+|`max('field')`     | Get the `MAX(field)` of a table and return the number       |
 
 `WRITE` Queries:
 ---------------
@@ -133,7 +140,6 @@ Utility Methods:
 
 |Method                       | Description                                              |
 |---                          |---                                                       |
-|`resetAll()`                 | Resets the SQL, automatically called on `table()`        |
 |`escape(string)`             | Escape a string for database injection                   |
 
 *Note: all values passed into query methods (not custom SQL's) automatically run through `escape()`*
