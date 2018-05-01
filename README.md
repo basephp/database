@@ -42,6 +42,13 @@ $user = DB::table('users')->where('email LIKE "%gmail.com" ')->results();
 // Delete the item that matches an ID
 DB::table('users')->where('id',7455)->delete();
 
+
+// Get all the cities that have over 1,000,000 population
+DB::table('postal_codes')
+    ->group('city')
+    ->having('population > 1000000');
+
+
 // Update user's name by ID
 DB::table('users')
     ->where('id',1233)
@@ -70,17 +77,19 @@ DB::table('users')->where('id',9983287)->increment('page_view',1);
 
 *These methods are stackable*
 
-|Method           |Option                       |Description          |
-|---              |---                          |---                  |
-|`table()`        | Required **MUST BE FIRST**  | `FROM table`        |
-|`select()`       | *Optional* Default: `*`     | `SELECT fields`     |
-|`where()`        | *Optional*                  | `WHERE`             |
-|`in()`           | *Optional*                  | `IN (values)`       |
-|`not()`          | *Optional*                  | `NOT IN (values)`   |
-|`limit()`        | *Optional*                  | `LIMIT number`      |
-|`offset()`       | *Optional*                  | Adding an offset    |
-|`order()`        | *Optional*                  | `ORDER BY fields`   |
-|`group()`        | *Optional*                  | `GROUP BY fields`   |
+|Method           |Option                         |Description           |
+|---              |---                            |---                   |
+|`table()`        | Required - **MUST BE FIRST**  | `FROM table`         |
+|`join()`         | *Optional*                    | `JOIN table`         |
+|`select()`       | *Optional* Default: `*`       | `SELECT fields`      |
+|`where()`        | *Optional*                    | `WHERE`              |
+|`in()`           | *Optional*                    | `IN (values)`        |
+|`not()`          | *Optional*                    | `NOT IN (values)`    |
+|`limit()`        | *Optional*                    | `LIMIT number`       |
+|`offset()`       | *Optional*                    | `LIMIT offset,limit` |
+|`order()`        | *Optional*                    | `ORDER BY fields`    |
+|`group()`        | *Optional*                    | `GROUP BY fields`    |
+|`having()`       | *Optional*                    | `HAVING`             |
 
 *Note: Calling `table()` will reset the current SQL. For SQL protection, `table()` is required to be first in chain.
 
