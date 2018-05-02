@@ -25,7 +25,11 @@ DB_NAME=database
 
 ## Examples
 
-**Get:**
+```php
+use \Base\Support\Facades\DB;
+```
+
+Get results:
 
 ```php
 // get a single user from the database
@@ -33,9 +37,32 @@ $user = DB::table('users')->where('id',912864)->first();
 
 // get all users in the database, order the results
 $users = DB::table('users')->order('id ASC')->get();
+
+// get all users that have gmail email address (writing custom SQL)
+$users = DB::table('users')->where('email LIKE "%gmail.com" ')->get();
+
+// count how many users are enabled
+$enabledUsers = DB::table('users')->where(['status'=>'enabled'])->count();
+
+// get most recent 10 enabled users
+$users = DB::table('users')
+            ->select(['id','name'])
+            ->where(['status'=>'enabled'])
+            ->limit(10)
+            ->order('id DESC')
+            ->get();
+
+// get all the cities that have over 1,000,000 population
+$cities = DB::table('postal_codes')
+            ->group('city')
+            ->having('population > 1000000')
+            ->get();
+
+// get the average price of all ebooks from the products table
+$avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
 ```
 
-**Update:**
+Update items:
 
 ```php
 // change user's name
@@ -44,9 +71,12 @@ DB::table('users')
     ->update([
         'name' => 'John Smith'
     ]);
+
+// increase this users "page view" count
+DB::table('users')->where('id',9983287)->increment('page_view',1);
 ```
 
-**Insert:**
+Insert new items:
 
 ```php
 // add a new user to the table
@@ -57,23 +87,19 @@ DB::table('users')
     ]);
 ```
 
-**Delete:**
+Delete items:
 
 ```php
 // delete a user by id
 DB::table('users')
     ->where('id',912864)
     ->delete();
-```
 
-```php
 // delete all users with deleted = 1
 DB::table('users')
     ->where(['deleted' => 1])
     ->delete();
 ```
-
-[More Examples] (https://github.com/basephp/database#more-examples)
 
 
 ## Query Builder
@@ -139,58 +165,3 @@ Utility Methods:
 ## Database Support
 
 *Currently only supports MySQL connections*
-
-
-## More Examples
-
-```php
-// add the access to the DB::class
-use \Base\Support\Facades\DB;
-
-// get the test more recent users
-$users = DB::table('users')
-            ->select(['id','name'])
-            ->where(['status'=>'enabled'])
-            ->limit(10)
-            ->order('id DESC')
-            ->get();
-
-// get just a single item (user) from the db table by id
-$user = DB::table('users')->where('id',32212)->first();
-
-// Write a RAW SQL Statement? Find all users that have a gmail email address
-$user = DB::table('users')->where('email LIKE "%gmail.com" ')->get();
-
-// Delete the item that matches an ID
-DB::table('users')->where('id',7455)->delete();
-
-// Get all the cities that have over 1,000,000 population
-$cities = DB::table('postal_codes')
-            ->group('city')
-            ->having('population > 1000000')
-            ->get();
-
-
-// Update user's name by ID
-DB::table('users')
-    ->where('id',1233)
-    ->update(['name' => 'John']);
-
-
-// Insert a new user
-DB::table('users')->insert([
-    'name' => 'Joe Smith',
-    'email' => 'joesmith@email.com'
-]);
-
-
-// Get a total count for how many enabled users are in the database
-$userCount = DB::table('users')->where(['status'=>'enabled'])->count();
-
-// increase this users "page view" count
-DB::table('users')->where('id',9983287)->increment('page_view',1);
-
-// Get the average price of all ebooks
-$avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
-
-```
