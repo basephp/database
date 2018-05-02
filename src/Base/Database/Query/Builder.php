@@ -1,6 +1,7 @@
 <?php namespace Base\Database\Query;
 
 use Base\Support\Collection;
+use Base\Database\ConnectionInterface;
 
 
 /**
@@ -110,7 +111,7 @@ class Builder
      *
      * @return void
      */
-    public function __construct($connection)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }

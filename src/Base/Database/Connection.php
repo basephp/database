@@ -16,7 +16,7 @@ class Connection
     * Setting the database object
     *
     */
-    public function setDatabase($db)
+    public function setDatabase(ConnectionInterface $db)
     {
         $this->db = $db;
     }

@@ -1,10 +1,11 @@
 <?php namespace Base\Database\MySQLi;
 
+use Base\Database\ConnectionInterface;
 
 /**
  * Extends mysqli and adds the ability to easily apc cache queries
  */
-class Connection extends \mysqli
+class Connection extends \mysqli implements ConnectionInterface
 {
 	private $return = false;
 
