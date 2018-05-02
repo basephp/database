@@ -6,7 +6,6 @@ Database and Query Builder for BasePHP. *This is an optional package, and is not
 * **BasePHP Database Package**
 
 ## Installation
----------------
 
 **(1) Install using composer**
 
@@ -25,30 +24,21 @@ DB_NAME=database
 
 
 ## Examples
----------------
-
-
-### The Basics
 
 **Get:**
 
-Get a single user.
-
 ```php
+// get a single user from the database
 $user = DB::table('users')->where('id',912864)->first();
-```
 
-Get all users in the database and order them by id
-
-```php
+// get all users in the database, order the results
 $users = DB::table('users')->order('id ASC')->get();
 ```
 
 **Update:**
 
-Change the user's name by using the `update()` method.
-
 ```php
+// change user's name
 DB::table('users')
     ->where('id',912864)
     ->update([
@@ -58,9 +48,8 @@ DB::table('users')
 
 **Insert:**
 
-Add new users to the table by using the `insert()` method
-
 ```php
+// add a new user to the table
 DB::table('users')
     ->insert([
         'name' => 'John Smith',
@@ -70,25 +59,24 @@ DB::table('users')
 
 **Delete:**
 
-Delete a user by it's Id.
-
 ```php
+// delete a user by id
 DB::table('users')
     ->where('id',912864)
     ->delete();
 ```
 
-Delete all users who have `deleted = 1`
-
 ```php
+// delete all users with deleted = 1
 DB::table('users')
     ->where(['deleted' => 1])
     ->delete();
 ```
 
+[More Examples] (https://github.com/basephp/database#more-examples)
+
 
 ## Query Builder
----------------
 
 *These methods are stackable*
 
@@ -111,7 +99,6 @@ DB::table('users')
 
 
 ## Execute Queries
----------------
 
 *These methods execute "read" queries and return database results*
 
@@ -150,13 +137,11 @@ Utility Methods:
 
 
 ## Database Support
----------------
 
 *Currently only supports MySQL connections*
 
 
 ## More Examples
----------------
 
 ```php
 // add the access to the DB::class
