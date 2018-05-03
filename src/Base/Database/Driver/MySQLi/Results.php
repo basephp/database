@@ -16,7 +16,6 @@ class Results
 	public function __construct($return)
 	{
 		$this->return = $return;
-        print_r($return);
 	}
 
 
