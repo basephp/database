@@ -61,11 +61,11 @@ abstract class Connection
 
 
     /**
-	 * Connection ID
+	 * Connection
 	 *
 	 * @var    object|resource
 	 */
-	public $connID = false;
+	public $connection = false;
 
 
     //--------------------------------------------------------------------
@@ -85,6 +85,9 @@ abstract class Connection
 	}
 
 
+    //--------------------------------------------------------------------
+
+
     /**
 	 * Initializes the database connection/settings.
 	 *
@@ -93,14 +96,17 @@ abstract class Connection
 	public function initialize()
 	{
         // check if the conncetion already exist.
-        if ($this->connID)
+        if ($this->connection)
         {
             return;
         }
 
         // Connect to the database and set the connection ID
-        $this->connID = $this->connect();
+        $this->connection = $this->connect();
 	}
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -108,6 +114,19 @@ abstract class Connection
 	 *
 	 */
 	abstract function query($sql);
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+	 * ...
+	 *
+	 */
+	abstract function escape($str);
+
+
+    //--------------------------------------------------------------------
 
 
 }

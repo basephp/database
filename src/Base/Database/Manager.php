@@ -58,7 +58,6 @@ class Manager
 		$className = 'Base\\Database\\Driver\\' . $options['driver'] . '\\Connect';
 
 		$this->connections[$handle] = new $className($options);
-        // $this->connections[$handle]->initialize();
 
 		return $this->connections[$handle];
 	}
@@ -79,5 +78,8 @@ class Manager
 	{
 		return $this->connections[$handle] ?? false;
 	}
+
+
+    //--------------------------------------------------------------------
 
 }

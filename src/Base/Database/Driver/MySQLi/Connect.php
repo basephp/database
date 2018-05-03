@@ -43,6 +43,8 @@ class Connect extends \Base\Database\Connection
     }
 
 
+    //--------------------------------------------------------------------
+
 
     /**
 	 * Select a specific database table to use.
@@ -58,12 +60,12 @@ class Connect extends \Base\Database\Connection
 			$databaseName = $this->database;
 		}
 
-		if (empty($this->connID))
+		if (!$this->connection)
 		{
 			$this->initialize();
 		}
 
-		if ($this->connID->select_db($databaseName))
+		if ($this->connection->select_db($databaseName))
 		{
 			$this->database = $databaseName;
 
@@ -74,6 +76,8 @@ class Connect extends \Base\Database\Connection
 	}
 
 
+    //--------------------------------------------------------------------
+
 
     /**
 	 * ...
@@ -82,13 +86,16 @@ class Connect extends \Base\Database\Connection
 	 */
 	public function query($sql)
 	{
-        if (empty($this->connID))
-        {
+        if (!$this->connection)
+		{
             $this->initialize();
         }
 
-        return new \Base\Database\Driver\MySQLi\Results($this->connID->query($sql, null));
+        return new \Base\Database\Driver\MySQLi\Results($this->connection->query($sql, null));
 	}
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -96,15 +103,18 @@ class Connect extends \Base\Database\Connection
 	 *
 	 * @return mixed
 	 */
-	public function real_escape_string($str)
+	public function escape($str)
 	{
-        if (empty($this->connID))
-        {
+        if (!$this->connection)
+		{
             $this->initialize();
         }
-        
-        return $this->connID->real_escape_string($str);
+
+        return $this->connection->real_escape_string($str);
 	}
+
+
+    //--------------------------------------------------------------------
 
 
 }

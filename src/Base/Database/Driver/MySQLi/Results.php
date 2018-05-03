@@ -6,7 +6,12 @@
 class Results
 {
 
+
     protected $return;
+
+
+    //--------------------------------------------------------------------
+
 
     /**
 	 * Saves our connection settings.
@@ -18,6 +23,8 @@ class Results
 		$this->return = $return;
 	}
 
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -32,6 +39,9 @@ class Results
 
         return false;
     }
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -56,6 +66,9 @@ class Results
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * This function loops through the results and returns them as an array of objects
     */
@@ -72,6 +85,9 @@ class Results
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
     * This function loops through the results and returns them as an array of objects
     */
@@ -86,6 +102,9 @@ class Results
 
         return $array;
     }
+
+
+    //--------------------------------------------------------------------
 
 
  }

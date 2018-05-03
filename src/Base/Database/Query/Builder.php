@@ -1046,7 +1046,7 @@ class Builder
     */
     public function escape(string $str = '')
     {
-        return $this->connection->real_escape_string($str);
+        return $this->connection->escape($str);
     }
 
 

@@ -10,7 +10,11 @@ use Base\Database\Manager as DatabaseManager;
 class Database
 {
 
+
     protected $connection = false;
+
+
+    //--------------------------------------------------------------------
 
 
     /**
@@ -29,6 +33,9 @@ class Database
     }
 
 
+    //--------------------------------------------------------------------
+
+
     /**
      * ...
      *
@@ -40,5 +47,9 @@ class Database
 
         return (new QueryBuilder($this->connection))->from($table);
     }
+
+
+    //--------------------------------------------------------------------
+    
 
 }
