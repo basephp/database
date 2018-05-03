@@ -1,36 +1,113 @@
 <?php namespace Base\Database;
 
-use Base\Database\Query\Builder as QueryBuilder;
 
 /**
-* Database Builder
+* Connection Class
+*
+* Do not call this class directly. This class is a parent of Driver Classes
 *
 */
-class Connection
+abstract class Connection
 {
+    /**
+	 * Database port
+	 *
+	 * @var    int
+	 */
+	protected $port = 3306;
 
-    protected $db;
+
+	/**
+	 * Hostname
+	 *
+	 * @var    string
+	 */
+	protected $hostname;
+
+
+	/**
+	 * Username
+	 *
+	 * @var    string
+	 */
+	protected $username;
+
+
+	/**
+	 * Password
+	 *
+	 * @var    string
+	 */
+	protected $password;
+
+
+	/**
+	 * Database name
+	 *
+	 * @var    string
+	 */
+	protected $database;
+
+
+	/**
+	 * Database driver
+	 *
+	 * @var    string
+	 */
+	protected $driver = 'MySQLi';
+
+
+    //--------------------------------------------------------------------
 
 
     /**
-    * Setting the database object
-    *
-    */
-    public function setDatabase(ConnectionInterface $db)
-    {
-        $this->db = $db;
-    }
+	 * Connection ID
+	 *
+	 * @var    object|resource
+	 */
+	public $connID = false;
+
+
+    //--------------------------------------------------------------------
+
+
+	/**
+	 * Saves our connection settings.
+	 *
+	 * @param array $params
+	 */
+	public function __construct(array $params)
+	{
+		foreach ($params as $key => $value)
+		{
+			$this->$key = $value;
+		}
+	}
 
 
     /**
-     * Run a query using the query builder
-     *
-     * @param  string $table
-     * @return \Base\Database\Query\Builder
-     */
-    public function table($table)
-    {
-        return (new QueryBuilder($this->db))->from($table);
-    }
+	 * Initializes the database connection/settings.
+	 *
+	 * @return mixed
+	 */
+	public function initialize()
+	{
+        // check if the conncetion already exist.
+        if ($this->connID)
+        {
+            return;
+        }
+
+        // Connect to the database and set the connection ID
+        $this->connID = $this->connect();
+	}
+
+
+    /**
+	 * ...
+	 *
+	 */
+	abstract function query($sql);
+
 
 }

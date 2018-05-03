@@ -1,25 +1,14 @@
 <?php namespace Base\Database\Middleware;
 
 use Base\Routing\Middleware;
-use Base\Database\Manager as DatabaseManager;
+use Base\Database\Connect;
 use Base\Support\Facades\DB;
 
 class Database extends Middleware
 {
     public function request()
     {
-
-        $db = DatabaseManager::getInstance();
-
-        $db->addConnection('default',[
-            'driver'   => config('db.driver'),
-            'hostname' => config('db.host'),
-            'database' => config('db.name'),
-            'username' => config('db.user'),
-            'password' => config('db.pass')
-        ]);
-
-        /*// create the database instance
+        // create the database instance
         $db = Connect::getInstance();
         $db->setConnection(config('db.driver'), 'default', config('db.host'), config('db.name'), config('db.user'), config('db.pass'));
 
@@ -31,6 +20,6 @@ class Database extends Middleware
 
         // kill the connection to prevent us from waiting until our logic completes.
         // without this; it could severely slow down the database server and website.
-        // DB::close();*/
+        // DB::close();
     }
 }

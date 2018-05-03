@@ -111,7 +111,7 @@ class Builder
      *
      * @return void
      */
-    public function __construct($connection)
+    public function __construct(ConnectionInterface $connection)
     {
         $this->connection = $connection;
     }
