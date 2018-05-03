@@ -108,17 +108,28 @@ abstract class Connection
     //--------------------------------------------------------------------
 
 
+	/**
+	 * Close the database connection.
+	 */
+	public function close()
+	{
+		if ($this->connection)
+		{
+			$this->closeConnection();
+			$this->connection = FALSE;
+		}
+	}
+
+
+    //--------------------------------------------------------------------
+
+
     /**
-    * Checks whether a SQL statement is a "WRITE" query.
-    *
-    * @param string $str
-    * @return bool
-    */
-    public function isWrite($sql)
-    {
-        return (bool) preg_match(
-            '/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', $sql);
-    }
+	 * Connect to the database.
+	 *
+	 * @return mixed
+	 */
+	abstract public function connect();
 
 
     //--------------------------------------------------------------------
@@ -128,7 +139,7 @@ abstract class Connection
 	 * ...
 	 *
 	 */
-	abstract function query($sql);
+	abstract function query(string $sql);
 
 
     //--------------------------------------------------------------------
@@ -138,10 +149,38 @@ abstract class Connection
 	 * ...
 	 *
 	 */
-	abstract function escape($str);
+	abstract function escape(string $str);
 
 
     //--------------------------------------------------------------------
+
+
+    /**
+	 * ...
+	 *
+	 */
+	abstract function insertId();
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+	 * ...
+	 */
+	abstract public function error();
+
+
+	//--------------------------------------------------------------------
+
+
+    /**
+	 * ...
+	 */
+	abstract protected function closeConnection();
+
+
+	//--------------------------------------------------------------------
 
 
 }

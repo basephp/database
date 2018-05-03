@@ -65,12 +65,58 @@ class Database
     {
         if ($this->connection == false) $this->connect('default');
 
-        if (!$this->connection->isWrite($sql))
+        if (!$this->isWriteSql($sql))
         {
             return new Collection($this->connection->query($sql)->results());
         }
 
-        return $this->connection->query($sql);
+        if ($this->isInsertSql($sql))
+        {
+            $r = $this->connection->query($sql);
+
+            if ($r)
+            {
+                return $this->connection->insertId();
+            }
+        }
+        else
+        {
+            return $this->connection->query($sql);
+        }
+
+        return false;
+    }
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+    * Checks whether a SQL statement is a "WRITE" query.
+    *
+    * @param string $str
+    * @return bool
+    */
+    public function isWriteSql($sql)
+    {
+        return (bool) preg_match(
+            '/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', $sql);
+    }
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+    * Checks whether a SQL statement is a "WRITE" query.
+    *
+    * @param string $str
+    * @return bool
+    */
+    public function isInsertSql($sql)
+    {
+        return (bool) preg_match(
+            '/^\s*"?(INSERT)\s/i', $sql);
     }
 
 

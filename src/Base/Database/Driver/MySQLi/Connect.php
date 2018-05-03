@@ -85,7 +85,7 @@ class Connect extends \Base\Database\Connection
 	 *
 	 * @return mixed
 	 */
-	public function query($sql)
+	public function query(string $sql)
 	{
         if (!$this->connection)
 		{
@@ -104,7 +104,7 @@ class Connect extends \Base\Database\Connection
 	 *
 	 * @return mixed
 	 */
-	public function escape($str)
+	public function escape(string $str)
 	{
         if (!$this->connection)
 		{
@@ -116,6 +116,55 @@ class Connect extends \Base\Database\Connection
 
 
     //--------------------------------------------------------------------
+
+
+	/**
+	 * Insert ID
+	 *
+	 * @return	int
+	 */
+	public function insertId()
+	{
+		return $this->connection->insert_id;
+	}
+
+
+    //--------------------------------------------------------------------
+
+
+    /**
+	 * Close the database connection.
+	 */
+	protected function closeConnection()
+	{
+		$this->connection->close();
+	}
+
+
+    //--------------------------------------------------------------------
+
+	/**
+	 * Returns the last error code and message.
+	 *
+	 * Must return an array with keys 'code' and 'message':
+	 *
+	 *  return ['code' => null, 'message' => null);
+	 *
+	 * @return	array
+	 */
+	public function error()
+	{
+		if ( ! empty($this->mysqli->connect_errno))
+		{
+			return [
+				'code'		 => $this->mysqli->connect_errno,
+				'message'	 => $this->mysqli->connect_error
+			];
+		}
+
+		return ['code' => $this->connection->errno, 'message' => $this->connection->error];
+	}
+
 
 
 }

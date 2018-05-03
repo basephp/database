@@ -631,7 +631,14 @@ class Builder
 
         if ($test==true) return $sql;
 
-        return $this->connection->query($sql);
+        $r = $this->connection->query($sql);
+
+        if ($r)
+        {
+            return $this->connection->insertId();
+        }
+
+        return false;
     }
 
 

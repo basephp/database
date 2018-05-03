@@ -60,16 +60,9 @@ $cities = DB::table('postal_codes')
 
 // get the average price of all ebooks from the products table
 $avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
-
-// Writing a RAW SQL query to get 10 products from the database.
-$products = DB::query("SELECT * FROM products WHERE status = 'enabled' LIMIT 10");
-foreach($products as $product)
-{
-    // display products here
-}
 ```
 
-Update items:
+**Update items:**
 
 ```php
 // change user's name
@@ -83,21 +76,18 @@ DB::table('users')
 DB::table('users')->where('id',9983287)->increment('page_view',1);
 ```
 
-Insert new items:
+**Insert items:**
 
 ```php
-// add a new user to the table
-DB::table('users')
-    ->insert([
-        'name' => 'John Smith',
-        'email' => 'jsmith@email.com'
-    ]);
-
-// writing raw queries (without the query builder)
-DB::query("INSERT INTO users WHERE name = 'John Smith', email = 'jsmith@email.com' ");
+// add a new user to the table, and return the new ID
+$newUserId =  DB::table('users')
+                ->insert([
+                    'name' => 'John Smith',
+                    'email' => 'jsmith@email.com'
+                ]);
 ```
 
-Delete items:
+**Delete items:**
 
 ```php
 // delete a user by id
@@ -109,6 +99,26 @@ DB::table('users')
 DB::table('users')
     ->where(['deleted' => 1])
     ->delete();
+```
+
+
+**Writing RAW SQL:**
+
+*Note: Raw Queries will return results into a `Collection`, unless you are "writing" to the database.*
+
+```php
+// Writing a RAW SQL query to get 10 products from the database.
+$products = DB::query("SELECT * FROM products WHERE status = 'enabled' LIMIT 10");
+foreach($products as $product)
+{
+    // display products here
+}
+
+// writing an update query
+DB::query("UPDATE products SET price = 61.41 WHERE id = '$id' ");
+
+// writing raw queries (without the query builder)
+$newUserId = DB::query("INSERT INTO users WHERE name = 'John Smith', email = 'jsmith@email.com' ");
 ```
 
 
@@ -155,7 +165,7 @@ DB::table('users')
 |Method                       | Description                                   |
 |---                          |---                                            |
 |`update(array)`              | Run the `UPDATE` query                        |
-|`insert(array)`              | Run the `INSERT` query                        |
+|`insert(array)`              | Run the `INSERT` query, returns `insert id`   |
 |`delete()`                   | Run the `DELETE` query                        |
 |`increment(field, value)`    | Run the `UPDATE` query                        |
 |`decrement(field, value)`    | Run the `UPDATE` query                        |
@@ -169,6 +179,8 @@ Utility Methods:
 |---                          |---                                                       |
 |`query(string)`              | Write a raw SQL query and return its results             |
 |`escape(string)`             | Escape a string for database injection                   |
+|`isWriteSql(string)`         | Checks a string if the SQL statement is write type       |
+|`isInsertSql(string)`        | Checks a string if the SQL statement is `INSERT`         |
 
 *Note: all values passed into query methods (not custom SQL's) automatically run through `escape()`*
 
