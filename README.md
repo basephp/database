@@ -104,8 +104,6 @@ DB::table('users')
 
 **Writing RAW SQL:**
 
-*Note: Raw Queries will return results into a `Collection`, unless you are "writing" to the database.*
-
 ```php
 // Writing a RAW SQL query to get 10 products from the database.
 $products = DB::query("SELECT * FROM products WHERE status = 'enabled' LIMIT 10");
@@ -113,6 +111,9 @@ foreach($products as $product)
 {
     // display products here
 }
+
+// get a single products
+$product = DB::query("SELECT * FROM products WHERE id = '$productId'")->first();
 
 // writing an update query
 DB::query("UPDATE products SET price = 61.41 WHERE id = '$id' ");
@@ -171,13 +172,21 @@ $newUserId = DB::query("INSERT INTO users WHERE name = 'John Smith', email = 'js
 |`decrement(field, value)`    | Run the `UPDATE` query                        |
 |`truncate()`                 | Run the `TRUNCATE` query                      |
 
+*Write a raw query*
+
+|Method                       | Description                                              |
+|---                          |---                                                       |
+|`query(string)`              | Write a raw SQL query and return its results             |
+
+*Note: Raw Queries will return results into a `Collection`, unless you are "writing" to the database.*
+*Note: Queries that use `INSERT` will return the `insert_id` automatically*
+
 
 Utility Methods:
 ---------------
 
 |Method                       | Description                                              |
 |---                          |---                                                       |
-|`query(string)`              | Write a raw SQL query and return its results             |
 |`escape(string)`             | Escape a string for database injection                   |
 |`isWriteSql(string)`         | Checks a string if the SQL statement is write type       |
 |`isInsertSql(string)`        | Checks a string if the SQL statement is `INSERT`         |
