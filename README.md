@@ -11,7 +11,7 @@ Database and Query Builder for BasePHP. *This is an optional package, and is not
 
 `php composer.phar require basephp/database dev-master`
 
-**(2) Add database to your `.env` file**
+**(2) Add to your `.env` file**
 
 ```
 DB_USER=admin
@@ -29,7 +29,7 @@ DB_NAME=database
 use \Base\Support\Facades\DB;
 ```
 
-Get results:
+**Results:**
 
 ```php
 // get a single user from the database

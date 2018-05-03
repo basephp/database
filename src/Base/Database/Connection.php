@@ -1,6 +1,5 @@
 <?php namespace Base\Database;
 
-
 /**
 * Connection Class
 *
