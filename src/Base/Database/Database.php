@@ -2,6 +2,7 @@
 
 use Base\Database\Query\Builder as QueryBuilder;
 use Base\Database\Manager as DatabaseManager;
+use Base\Support\Collection;
 
 /**
 * Database
@@ -10,7 +11,10 @@ use Base\Database\Manager as DatabaseManager;
 class Database
 {
 
-
+    /**
+     *...
+     *
+     */
     protected $connection = false;
 
 
@@ -50,6 +54,27 @@ class Database
 
 
     //--------------------------------------------------------------------
-    
+
+
+    /**
+     * ...
+     *
+     * @param  string $table
+     */
+    public function query($sql)
+    {
+        if ($this->connection == false) $this->connect('default');
+
+        if (!$this->connection->isWrite($sql))
+        {
+            return new Collection($this->connection->query($sql)->results());
+        }
+
+        return $this->connection->query($sql);
+    }
+
+
+    //--------------------------------------------------------------------
+
 
 }

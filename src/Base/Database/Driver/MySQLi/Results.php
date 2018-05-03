@@ -1,40 +1,17 @@
 <?php namespace Base\Database\Driver\MySQLi;
 
-/**
- * Extends mysqli and adds the ability to easily apc cache queries
- */
-class Results
+
+class Results extends \Base\Database\Results
 {
 
-
-    protected $return;
-
-
-    //--------------------------------------------------------------------
-
-
     /**
-	 * Saves our connection settings.
-	 *
-	 * @param array $params
-	 */
-	public function __construct($return)
-	{
-		$this->return = $return;
-	}
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
-    * row
+    * ...
     */
     public function row()
     {
-        if ($this->return)
+        if ($this->result)
         {
-            return $this->return->fetch_object();
+            return $this->result->fetch_object();
         }
 
         return false;
@@ -45,24 +22,19 @@ class Results
 
 
     /**
-    * results
+    * ...
+    *
     */
-    public function results($returnType = 'object')
+    public function toArray()
     {
-        if ($this->return)
-        {
-            if ($returnType == 'object')
-            {
-                return $this->resultsObject($this->return);
-            }
+        $a = [];
 
-            if ($returnType == 'array')
-            {
-                return $this->resultsArray($this->return);
-            }
+        while($obj = $this->result->fetch_object() && $assoc = $this->result->fetch_assoc())
+        {
+            $a[$assoc] = $obj;
         }
 
-        return false;
+        return $a;
     }
 
 
@@ -70,37 +42,19 @@ class Results
 
 
     /**
-    * This function loops through the results and returns them as an array of objects
+    * ...
+    *
     */
-    private function resultsArray($result)
+    public function toObject()
     {
-        $array = array();
+        $a = [];
 
-        while($obj = $result->fetch_object() && $assoc = $result->fetch_assoc())
+        while($obj = $this->result->fetch_object())
         {
-            $array[$assoc] = $obj;
+            $a[] = $obj;
         }
 
-        return $array;
-    }
-
-
-    //--------------------------------------------------------------------
-
-
-    /**
-    * This function loops through the results and returns them as an array of objects
-    */
-    private function resultsObject($result)
-    {
-        $array = array();
-
-        while($obj = $result->fetch_object())
-        {
-            $array[] = $obj;
-        }
-
-        return $array;
+        return $a;
     }
 
 

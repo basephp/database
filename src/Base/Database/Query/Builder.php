@@ -1065,22 +1065,6 @@ class Builder
     }
 
 
-    //--------------------------------------------------------------------
-
-
-    /**
-    * Checks whether a SQL statement is a "WRITE" query.
-    *
-    * @param string $str
-    * @return bool
-    */
-    protected function isWrite($sql)
-    {
-        return (bool) preg_match(
-            '/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', $sql);
-    }
-
-
     // --------------------------------------------------------------------
 
 

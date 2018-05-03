@@ -1,5 +1,6 @@
 <?php namespace Base\Database\Driver\MySQLi;
 
+use Base\Database\Driver\MySQLi\Results;
 
 /**
  * Driver Connect Class
@@ -91,7 +92,7 @@ class Connect extends \Base\Database\Connection
             $this->initialize();
         }
 
-        return new \Base\Database\Driver\MySQLi\Results($this->connection->query($sql, null));
+        return new Results($this->connection, $this->connection->query($sql, null));
 	}
 
 

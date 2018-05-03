@@ -60,6 +60,13 @@ $cities = DB::table('postal_codes')
 
 // get the average price of all ebooks from the products table
 $avgPrice = DB::table('products')->where('category','ebooks')->avg('price');
+
+// Writing a RAW SQL query to get 10 products from the database.
+$products = DB::query("SELECT * FROM products WHERE status = 'enabled' LIMIT 10");
+foreach($products as $product)
+{
+    // display products here
+}
 ```
 
 Update items:
@@ -85,6 +92,9 @@ DB::table('users')
         'name' => 'John Smith',
         'email' => 'jsmith@email.com'
     ]);
+
+// writing raw queries (without the query builder)
+DB::query("INSERT INTO users WHERE name = 'John Smith', email = 'jsmith@email.com' ");
 ```
 
 Delete items:
@@ -157,6 +167,7 @@ Utility Methods:
 
 |Method                       | Description                                              |
 |---                          |---                                                       |
+|`query(string)`              | Write a raw SQL query and return its results             |
 |`escape(string)`             | Escape a string for database injection                   |
 
 *Note: all values passed into query methods (not custom SQL's) automatically run through `escape()`*
