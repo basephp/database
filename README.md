@@ -102,7 +102,7 @@ DB::table('users')
 ```
 
 
-**Writing RAW SQL:**
+**RAW SQL:**
 
 ```php
 // Writing a RAW SQL query to get 10 products from the database.
@@ -179,6 +179,7 @@ $newUserId = DB::query("INSERT INTO users WHERE name = 'John Smith', email = 'js
 |`query(string)`              | Write a raw SQL query and return its results             |
 
 *Note: Raw Queries will return results into a `Collection`, unless you are "writing" to the database.*
+
 *Note: Queries that use `INSERT` will return the `insert_id` automatically*
 
 
