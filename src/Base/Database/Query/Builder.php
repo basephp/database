@@ -315,7 +315,9 @@ class Builder
         $vals = [];
         foreach($values as $v)
         {
-            $vals[] = $this->escape($v);
+            if (!is_string($v) && !is_numeric($v)) continue;
+
+            $vals[] = (is_string($v) ? $this->escape($v) : $v);
         }
 
         $this->where[] = [
@@ -350,7 +352,9 @@ class Builder
         $vals = [];
         foreach($values as $v)
         {
-            $vals[] = $this->escape($v);
+            if (!is_string($v) && !is_numeric($v)) continue;
+
+            $vals[] = (is_string($v) ? $this->escape($v) : $v);
         }
 
         $this->where[] = [
