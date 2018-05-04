@@ -1,11 +1,12 @@
 <?php namespace Base\Database\ServiceProvider;
 
 use Base\Database\Manager as DatabaseManager;
+use Base\Support\ServiceProvider;
 
-class Database
+class Database extends ServiceProvider
 {
 
-    public function __construct($app)
+    public function boot()
     {
         $db = DatabaseManager::getInstance();
 
