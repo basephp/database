@@ -1,15 +1,18 @@
 # BasePHP: Database Package
 Database Connections and Query Builder for BasePHP. *This is an optional package, and is not a requirement for BasePHP*
 
+## Quick Links:
 * [BasePHP Framework](https://github.com/basephp/framework)
-* [BasePHP Example Application](https://github.com/basephp/basephp)
-* **BasePHP Database Package**
+* [Example Application](https://github.com/basephp/basephp)
+* **BasePHP Package - Database**
 
 ## Installation
 
 **(1) Install using composer**
 
-`php composer require basephp/database dev-master`
+```
+php composer require basephp/database dev-master
+```
 
 **(2) Add to your `.env` file**
 
@@ -18,6 +21,8 @@ DB_USER=admin
 DB_PASS=password
 DB_HOST=127.0.0.1
 DB_NAME=database
+DB_PORT=3306
+DB_DRIVER=MySQLi
 ```
 
 **(3) Add the `example_db.php` to your `config/` directory**
