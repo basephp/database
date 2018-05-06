@@ -1,5 +1,7 @@
-# BasePHP: Database Package
-Database Connections and Query Builder for BasePHP. *This is an optional package, and is not a requirement for BasePHP*
+# BasePHP Package - Database
+Database and Query Builder for BasePHP.
+
+*This is an optional package, and is not a requirement for BasePHP*
 
 ## Quick Links:
 * [BasePHP Framework](https://github.com/basephp/framework)
