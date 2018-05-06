@@ -1,7 +1,7 @@
 <?php namespace Base\Database\ServiceProvider;
 
 use Base\Database\Manager as DatabaseManager;
-use Base\Support\ServiceProvider;
+use Base\ServiceProvider;
 
 class Database extends ServiceProvider
 {
