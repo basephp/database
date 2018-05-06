@@ -1,15 +1,15 @@
 # BasePHP: Database Package
-Database and Query Builder for BasePHP. *This is an optional package, and is not a requirement for BasePHP*
+Database Connections and Query Builder for BasePHP. *This is an optional package, and is not a requirement for BasePHP*
 
 * [BasePHP Framework](https://github.com/basephp/framework)
-* [BasePHP Example Application](https://github.com/basephp/application)
+* [BasePHP Example Application](https://github.com/basephp/basephp)
 * **BasePHP Database Package**
 
 ## Installation
 
 **(1) Install using composer**
 
-`php composer.phar require basephp/database dev-master`
+`php composer require basephp/database dev-master`
 
 **(2) Add to your `.env` file**
 
