@@ -1,4 +1,6 @@
-<?php namespace Base\Database\ServiceProvider;
+<?php
+
+namespace Base\Database\ServiceProvider;
 
 use Base\Database\Manager as DatabaseManager;
 use Base\ServiceProvider;

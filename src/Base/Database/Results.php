@@ -1,4 +1,6 @@
-<?php namespace Base\Database;
+<?php
+
+namespace Base\Database;
 
 /**
  * Extends mysqli and adds the ability to easily apc cache queries

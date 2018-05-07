@@ -1,5 +1,6 @@
-<?php namespace Base\Database\Driver\MySQLi;
+<?php
 
+namespace Base\Database\Driver\MySQLi;
 
 class Results extends \Base\Database\Results
 {

@@ -1,4 +1,6 @@
-<?php namespace Base\Database;
+<?php
+
+namespace Base\Database;
 
 
 class Manager

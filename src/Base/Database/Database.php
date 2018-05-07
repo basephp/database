@@ -1,4 +1,6 @@
-<?php namespace Base\Database;
+<?php
+
+namespace Base\Database;
 
 use Base\Database\Query\Builder as QueryBuilder;
 use Base\Database\Manager as DatabaseManager;

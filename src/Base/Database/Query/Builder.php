@@ -1,4 +1,6 @@
-<?php namespace Base\Database\Query;
+<?php
+
+namespace Base\Database\Query;
 
 use Base\Support\Collection;
 use Base\Database\ConnectionInterface;

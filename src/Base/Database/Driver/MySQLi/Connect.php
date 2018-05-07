@@ -1,4 +1,6 @@
-<?php namespace Base\Database\Driver\MySQLi;
+<?php
+
+namespace Base\Database\Driver\MySQLi;
 
 use Base\Database\Driver\MySQLi\Results;
 
