@@ -1,11 +1,11 @@
 <?php
 
-namespace Base\Database\ServiceProvider;
+namespace Base\Database\Providers;
 
 use Base\Database\Manager as DatabaseManager;
 use Base\ServiceProvider;
 
-class Database extends ServiceProvider
+class DatabaseServiceProvider extends ServiceProvider
 {
 
     public function boot()
