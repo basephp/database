@@ -14,7 +14,7 @@ class Database
 {
 
     /**
-     *...
+     * The current connection
      *
      */
     protected $connection = false;
@@ -24,9 +24,9 @@ class Database
 
 
     /**
-     *...
+     * Get a connection from the database manager
      *
-     * @param  string $handle
+     * @param string $handle
      */
     public function connect($handle)
     {
@@ -43,9 +43,9 @@ class Database
 
 
     /**
-     * ...
+     * Access the Query Builder
      *
-     * @param  string $table
+     * @param string $table
      */
     public function table($table)
     {
@@ -59,20 +59,20 @@ class Database
 
 
     /**
-     * ...
+     * Run a raw query
      *
-     * @param  string $table
+     * @param string $sql
      */
     public function query($sql)
     {
         if ($this->connection == false) $this->connect('default');
 
-        if (!$this->isWriteSql($sql))
+        if (!$this->isWrite($sql))
         {
             return new Collection($this->connection->query($sql)->results());
         }
 
-        if ($this->isInsertSql($sql))
+        if ($this->isInsert($sql))
         {
             $r = $this->connection->query($sql);
 
@@ -99,7 +99,7 @@ class Database
     * @param string $str
     * @return bool
     */
-    public function isWriteSql($sql)
+    public function isWrite($sql)
     {
         return (bool) preg_match(
             '/^\s*"?(SET|INSERT|UPDATE|DELETE|REPLACE|CREATE|DROP|TRUNCATE|LOAD|COPY|ALTER|RENAME|GRANT|REVOKE|LOCK|UNLOCK|REINDEX)\s/i', $sql);
@@ -115,7 +115,7 @@ class Database
     * @param string $str
     * @return bool
     */
-    public function isInsertSql($sql)
+    public function isInsert($sql)
     {
         return (bool) preg_match(
             '/^\s*"?(INSERT)\s/i', $sql);
