@@ -10,6 +10,5 @@
         "psr-4": {
             "Base\\": "src/Base/"
         }
-    },
-    "optimize-autoloader": true
+    }
 }
