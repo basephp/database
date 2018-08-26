@@ -1,10 +1,10 @@
 {
     "name": "basephp/database",
-    "description": "BasePHP Database Package",
+    "description": "BasePHP Package: Database",
     "license": "MIT",
     "require": {
         "php": ">=7.0",
-        "basephp/framework" : "dev-master"
+        "basephp/framework": "1.*",
     },
     "autoload": {
         "psr-4": {
