@@ -4,7 +4,7 @@
     "license": "MIT",
     "require": {
         "php": ">=7.0",
-        "basephp/framework": "1.*",
+        "basephp/framework": "1.1.*",
     },
     "autoload": {
         "psr-4": {
