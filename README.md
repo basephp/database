@@ -10,13 +10,7 @@ Database and Query Builder for BasePHP.
 
 ## Installation
 
-**(1) Install using composer**
-
-```
-composer require basephp/database
-```
-
-**(2) Add to your `.env` file**
+**(1)** Add sensitive information in your `.env` file
 
 ```
 DB_USER=admin
@@ -27,7 +21,7 @@ DB_PORT=3306
 DB_DRIVER=MySQLi
 ```
 
-**(3) Add the `db.example.php` to your `config/` directory**
+**(2)** If you do not have the `/config/db.php`, then copy the `db.example.php` from this repo and rename it.
 
 
 ## Examples
