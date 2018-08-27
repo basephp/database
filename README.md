@@ -1,12 +1,12 @@
 > **Note:** This repository requires the use of the BasePHP framework. If you would like to learn more about the framework, visit [BasePHP](https://github.com/basephp/framework).
 
-# BasePHP Package - Database
+# BasePHP Component - Database
 Database and Query Builder for BasePHP.
 
 ## Quick Links:
 * [BasePHP Framework](https://github.com/basephp/framework)
 * [Example Application](https://github.com/basephp/basephp)
-* **BasePHP Package - Database**
+* **BasePHP Component - Database**
 
 ## Installation
 
